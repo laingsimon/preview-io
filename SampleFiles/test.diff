@@ -1,0 +1,33 @@
+Index: C:/Data/Code/FuelAdvance.Notitia/trunk/AdminWebUI/Mailing/SendMail.aspx
+===================================================================
+--- C:/Data/Code/FuelAdvance.Notitia/trunk/AdminWebUI/Mailing/SendMail.aspx	(revision 5349)
++++ C:/Data/Code/FuelAdvance.Notitia/trunk/AdminWebUI/Mailing/SendMail.aspx	(working copy)
+@@ -3,10 +3,6 @@
+ 	<h2>Send Mail  (<asp:Literal runat="server" ID="CurrentURI" />)</h2>
+ 	<table class="layoutTable">
+ 		<tr>
+-			<td>From</td>
+-			<td><asp:Literal runat="server" ID="MailerFrom" /></td>
+-		</tr>
+-		<tr>
+ 			<td>Subject</td>
+ 			<td><asp:Literal runat="server" ID="MailerSubject" /></td>
+ 		</tr>
+@@ -15,8 +11,16 @@
+ 			<td><asp:HyperLink runat="server" ID="MailerBody" Target="_blank" Text="View" /></td>
+ 		</tr>
+ 		<tr>
++			<td>From</td>
++			<td><asp:Literal runat="server" ID="MailerFrom" /></td>
++		</tr>
++		<tr>
+ 			<td>To</td>
+ 			<td><asp:TextBox runat="server" ID="MailerTo" TextMode="MultiLine" Rows="15" Columns="50" /></td>
+ 		</tr>
++		<tr>
++			<td>&nbsp;</td>
++			<td><asp:Button runat="server" ID="MailerSend" UseSubmitBehavior="true" Text="Send Now" OnClick="MailerSend_Click" /></td>
++		</tr>
+ 	</table>
+ </asp:Content>
+\ No newline at end of file

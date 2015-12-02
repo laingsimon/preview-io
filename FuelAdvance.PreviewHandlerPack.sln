@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1295F21-D01C-4D80-B2A9-43748BBA7980}"
+	ProjectSection(SolutionItems) = preProject
+		FuelAdvance.PreviewHandlerPack.vsmdi = FuelAdvance.PreviewHandlerPack.vsmdi
+		localtestrun.testrunconfig = localtestrun.testrunconfig
+		Readme.rtf = Readme.rtf
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewHandlers", "PreviewHandlers\PreviewHandlers.csproj", "{90E73450-FF70-4545-9F3E-0EB2BEF40818}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{92B0055D-DCF8-4464-B60D-8BDE4D59B1DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{8A31C180-0EF3-40F0-A573-A0C9B92892C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHarness", "TestHarness\TestHarness.csproj", "{AEAD1DC7-11BC-4052-B913-BE7ED2CF81FB}"
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = FuelAdvance.PreviewHandlerPack.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{90E73450-FF70-4545-9F3E-0EB2BEF40818}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90E73450-FF70-4545-9F3E-0EB2BEF40818}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90E73450-FF70-4545-9F3E-0EB2BEF40818}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90E73450-FF70-4545-9F3E-0EB2BEF40818}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B0055D-DCF8-4464-B60D-8BDE4D59B1DE}.Debug|Any CPU.ActiveCfg = Debug
+		{92B0055D-DCF8-4464-B60D-8BDE4D59B1DE}.Debug|Any CPU.Build.0 = Debug
+		{92B0055D-DCF8-4464-B60D-8BDE4D59B1DE}.Release|Any CPU.ActiveCfg = Release
+		{8A31C180-0EF3-40F0-A573-A0C9B92892C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A31C180-0EF3-40F0-A573-A0C9B92892C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A31C180-0EF3-40F0-A573-A0C9B92892C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A31C180-0EF3-40F0-A573-A0C9B92892C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEAD1DC7-11BC-4052-B913-BE7ED2CF81FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEAD1DC7-11BC-4052-B913-BE7ED2CF81FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEAD1DC7-11BC-4052-B913-BE7ED2CF81FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEAD1DC7-11BC-4052-B913-BE7ED2CF81FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
