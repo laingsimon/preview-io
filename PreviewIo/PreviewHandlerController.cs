@@ -47,7 +47,7 @@ namespace PreviewIo
 				Trace.TraceInformation("Initialising with a stream");
 
 				_previewForm.Reset();
-				_previewFileStream = pstream.ToStream();
+				_previewFileStream = pstream.ToStream().ToMemoryStream();
 			}
 			catch (Exception exc)
 			{

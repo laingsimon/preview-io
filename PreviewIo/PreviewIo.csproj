@@ -98,6 +98,12 @@
     </Compile>
     <Compile Include="StreamExtensions.cs" />
     <Compile Include="WinApi.cs" />
+    <Compile Include="XmlControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="XmlControl.Designer.cs">
+      <DependentUpon>XmlControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -117,6 +123,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="XmlControl.resx">
+      <DependentUpon>XmlControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

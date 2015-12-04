@@ -11,6 +11,51 @@ namespace PreviewIo
 			return new _ReadOnlyStream(stream);
 		}
 
+		public static MemoryStream ToMemoryStream(this Stream stream)
+		{
+			var buffer = new byte[stream.Length];
+			stream.Read(buffer, 0, buffer.Length);
+			return new MemoryStream(buffer, false);
+		}
+
+		public static bool IsDrawing(this Stream stream)
+		{
+			if (!stream.CanSeek)
+				throw new InvalidOperationException("This operation would corrupt the stream");
+
+			try
+			{
+				var reader = new StreamReader(stream);
+				var headerChars = new char[50];
+				reader.Read(headerChars, 0, headerChars.Length);
+				var headerText = new string(headerChars);
+
+				return headerText.StartsWith("<mxfile");
+			}
+			finally
+			{
+				stream.Position = 0;
+			}
+		}
+
+		public static string ReadAsString(this Stream stream)
+		{
+			if (!stream.CanSeek)
+				throw new InvalidOperationException("This operation would corrupt the stream");
+
+			stream.Position = 0;
+
+			try
+			{
+				var reader = new StreamReader(stream);
+				return reader.ReadToEnd();
+			}
+			finally
+			{
+				stream.Position = 0;
+			}
+		}
+
 		private class _ReadOnlyStream : Stream
 		{
 			// ReSharper disable InconsistentNaming

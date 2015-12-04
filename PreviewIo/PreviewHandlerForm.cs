@@ -54,7 +54,13 @@ namespace PreviewIo
 			try
 			{
 				_UpdateSize();
-				Reset();
+				_Reset();
+
+				if (!_context.FileStream.IsDrawing())
+				{
+					_ReplaceControl(new XmlControl(_context.FileStream.ReadAsString()));
+					return;
+				}
 
 				var drawing = new Drawing(_context.FileStream);
 				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(_context.Settings);
