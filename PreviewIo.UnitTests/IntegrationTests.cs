@@ -25,7 +25,7 @@ namespace PreviewIo.UnitTests
 				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(settings);
 				var generator = previewGeneratorFactory.Create();
 
-				var preview = await drawing.GeneratePreview(generator, CancellationToken.None);
+				var preview = await drawing.GeneratePreview(generator, new Size(100, 100), CancellationToken.None);
 
 				var data = new byte[preview.Length];
 				preview.Read(data, 0, data.Length);

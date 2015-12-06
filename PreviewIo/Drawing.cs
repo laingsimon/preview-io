@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,9 +14,14 @@ namespace PreviewIo
 			_drawingContent = drawingContent;
 		}
 
-		public async Task<Stream> GeneratePreview(IPreviewGenerator generator, CancellationToken token)
+		public async Task<Size?> GetSize(ISizeExtractor sizeExtractor, CancellationToken token)
 		{
-			return await generator.GeneratePreview(_drawingContent, token);
+			return await sizeExtractor.ExtractSize(_drawingContent, token);
+		}
+
+		public async Task<Stream> GeneratePreview(IPreviewGenerator generator, Size previewSize, CancellationToken token)
+		{
+			return await generator.GeneratePreview(_drawingContent, previewSize, token);
 		}
 	}
 }

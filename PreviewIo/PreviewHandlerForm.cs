@@ -66,7 +66,9 @@ namespace PreviewIo
 				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(_context.Settings);
 				var generator = previewGeneratorFactory.Create();
 
-				var preview = await drawing.GeneratePreview(generator, _context.TokenSource.Token);
+				var drawingSize = await drawing.GetSize(new SizeExtractor(), _context.TokenSource.Token);
+				var previewSize = drawingSize ?? _context.Settings.Resolution;
+				var preview = await drawing.GeneratePreview(generator, previewSize, _context.TokenSource.Token);
 
 				_ReplaceControl(new PreviewControl(Image.FromStream(preview), _context));
 			}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
@@ -20,7 +21,7 @@ namespace PreviewIo
 			_requestUri = requestUri;
 		}
 
-		public async Task<Stream> GeneratePreview(Stream drawingContent, CancellationToken token)
+		public async Task<Stream> GeneratePreview(Stream drawingContent, Size previewSize, CancellationToken token)
 		{
 			var request = new FormUrlEncodedContent(new Dictionary<string, string>
 			{
@@ -29,8 +30,8 @@ namespace PreviewIo
 				{ "xml", _ReadFileContent(drawingContent) },
 				{ "base64", "O" },
 				{ "bg", "none" },
-				{ "w", _settings.Resolution.Width.ToString() },
-				{ "h", _settings.Resolution.Height.ToString() },
+				{ "w", previewSize.Width.ToString() },
+				{ "h", previewSize.Height.ToString() },
 				{ "border", "1" }
 			});
 
