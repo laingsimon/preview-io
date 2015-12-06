@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.IO.Compression;
 using System.Net.Http;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
+using System.Xml;
+using System.Xml.Linq;
 
 namespace PreviewIo
 {
@@ -46,7 +51,58 @@ namespace PreviewIo
 		private static string _ReadFileContent(Stream drawingContent)
 		{
 			using (var reader = new StreamReader(drawingContent))
-				return reader.ReadToEnd();
+			{
+				var xml = reader.ReadToEnd();
+				if (_IsCompressed(xml))
+					return xml;
+
+				return _Compress(xml);
+			}
+		}
+
+		private static string _Compress(string xml)
+		{
+			var deflatedUrlEncodedXml = new MemoryStream();
+			using (var encodingStream = CompressedXmlStream.Write(deflatedUrlEncodedXml))
+			using (var writer = new StreamWriter(encodingStream, Encoding.UTF8))
+				writer.Write(_RemoveXmlHeader(xml));
+
+			var base64DeflatedXml = Encoding.UTF8.GetString(deflatedUrlEncodedXml.ToArray());
+
+			var mxFile = new XElement(
+				"mxfile",
+				new XElement("diagram")
+				{
+					Value = base64DeflatedXml
+				},
+				new XAttribute("userAgent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36"),
+				new XAttribute("type", "device"));
+
+			var compressedMxFile = new MemoryStream();
+			using (var writer = XmlWriter.Create(compressedMxFile, new XmlWriterSettings
+			{
+				Indent = false,
+				Encoding = Encoding.UTF8,
+				OmitXmlDeclaration = true
+			}))
+			{
+				mxFile.WriteTo(writer);
+			}
+
+			return Encoding.UTF8.GetString(compressedMxFile.ToArray());
+		}
+
+		private static string _RemoveXmlHeader(string xml)
+		{
+			var document = XDocument.Parse(xml);
+			return document.Root.ToString();
+		}
+
+		private static bool _IsCompressed(string xml)
+		{
+			var headerText = xml.Substring(0, Math.Min(xml.Length, 53));
+
+			return headerText.Contains("<mxfile ");
 		}
 	}
 }

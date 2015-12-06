@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UrlEncodingStream.cs" />
+    <Compile Include="Base64Stream.cs" />
     <Compile Include="ComInterop\COLORREF.cs" />
     <Compile Include="ComInterop\IInitializeWithFile.cs" />
     <Compile Include="ComInterop\IInitializeWithStream.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="ComInterop\LOGFONT.cs" />
     <Compile Include="ComInterop\MSG.cs" />
     <Compile Include="ComInterop\RECT.cs" />
+    <Compile Include="CompressedXmlStream.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="ErrorControl.cs">
       <SubType>UserControl</SubType>

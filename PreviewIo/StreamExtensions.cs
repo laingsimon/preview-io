@@ -26,11 +26,11 @@ namespace PreviewIo
 			try
 			{
 				var reader = new StreamReader(stream);
-				var headerChars = new char[50];
+				var headerChars = new char[53];
 				reader.Read(headerChars, 0, headerChars.Length);
 				var headerText = new string(headerChars);
 
-				return headerText.StartsWith("<mxfile");
+				return headerText.Contains("<mxfile ") || headerText.Contains("<mxGraphModel ");
 			}
 			finally
 			{

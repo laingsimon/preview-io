@@ -10,8 +10,9 @@ namespace PreviewIo.UnitTests
 	[TestFixture]
 	public class IntegrationTests
 	{
-		[Test]
-		public async Task ShouldBeAbleToGenerateAPreview()
+		[TestCase("Sample file.xml")]
+		[TestCase("Sample file - plain.xml")]
+		public async Task ShouldBeAbleToGenerateAPreview(string fileName)
 		{
 			var settings = new PreviewSettings
 			{
@@ -19,7 +20,7 @@ namespace PreviewIo.UnitTests
 				Resolution = new Size(100, 100)
 			};
 
-			using (var fileStream = File.OpenRead(@"..\..\..\Sample file.xml"))
+			using (var fileStream = File.OpenRead(@"..\..\..\" + fileName))
 			{
 				var drawing = new Drawing(fileStream);
 				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(settings);
@@ -27,9 +28,9 @@ namespace PreviewIo.UnitTests
 
 				var preview = await drawing.GeneratePreview(generator, new Size(100, 100), CancellationToken.None);
 
-				var data = new byte[preview.Length];
-				preview.Read(data, 0, data.Length);
-				Assert.That(data.Length, Is.GreaterThan(1)); //more than 1 byte in the response!
+				Assert.That(
+					() => Image.FromStream(preview),
+					Throws.Nothing);
 			}
 		}
 	}

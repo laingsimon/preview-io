@@ -50,11 +50,8 @@ namespace PreviewIo
 
 		private XElement _UnCompressDocument(XElement diagram)
 		{
-			var compressedData = Convert.FromBase64String(diagram.Value);
-			var compressedDataStream = new MemoryStream(compressedData);
-			var zipStream = new DeflateStream(compressedDataStream, CompressionMode.Decompress);
-
-			using (var reader = new StreamReader(zipStream))
+			var stream = CompressedXmlStream.Read(diagram.Value);
+			using (var reader = new StreamReader(stream))
 			{
 				var urlEncodedXml = reader.ReadToEnd();
 				var xml = HttpUtility.UrlDecode(urlEncodedXml);

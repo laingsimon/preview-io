@@ -1,0 +1,22 @@
+﻿using System.IO;
+using System.IO.Compression;
+
+namespace PreviewIo
+{
+	internal static class CompressedXmlStream
+	{
+		public static Stream Read(string base64EncodedDeflatedXml)
+		{
+			var decoded = new Base64Stream(base64EncodedDeflatedXml);
+			var decompression = new DeflateStream(decoded, CompressionMode.Decompress);
+			return new UrlEncodingStream(decompression, true);
+		}
+
+		public static Stream Write(Stream underlyingStream)
+		{
+			var base64Stream = new Base64Stream(underlyingStream, false);
+			var compression = new DeflateStream(base64Stream, CompressionMode.Compress);
+			return new UrlEncodingStream(compression, false);
+		}
+	}
+}
