@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace PreviewIo
@@ -70,7 +71,19 @@ namespace PreviewIo
 				var previewSize = drawingSize ?? _context.Settings.Resolution;
 				var preview = await drawing.GeneratePreview(generator, previewSize, _context.TokenSource.Token);
 
-				_ReplaceControl(new PreviewControl(Image.FromStream(preview), _context));
+				try
+				{
+					var image = Image.FromStream(preview);
+					_ReplaceControl(new PreviewControl(image, _context));
+				}
+				catch (Exception exc)
+				{
+					using (var reader = new StreamReader(preview))
+					{
+						var responseBody = reader.ReadToEnd();
+						throw new InvalidOperationException("Invalid image data returned: " + responseBody, exc);
+					}
+				}
 			}
 			catch (OperationCanceledException)
 			{ }
