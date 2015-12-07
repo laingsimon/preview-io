@@ -29,22 +29,14 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.picPreview = new System.Windows.Forms.PictureBox();
 			this.mnuContext = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.itmPrint = new System.Windows.Forms.ToolStripMenuItem();
-			((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
+			this.picPreview = new System.Windows.Forms.PictureBox();
+			this.pnlScroller = new System.Windows.Forms.Panel();
 			this.mnuContext.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
+			this.pnlScroller.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// picPreview
-			// 
-			this.picPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.picPreview.Location = new System.Drawing.Point(0, 0);
-			this.picPreview.Name = "picPreview";
-			this.picPreview.Size = new System.Drawing.Size(150, 150);
-			this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.picPreview.TabIndex = 0;
-			this.picPreview.TabStop = false;
 			// 
 			// mnuContext
 			// 
@@ -60,23 +52,44 @@
 			this.itmPrint.Text = "Print";
 			this.itmPrint.Click += new System.EventHandler(this.itmPrint_Click);
 			// 
+			// picPreview
+			// 
+			this.picPreview.Location = new System.Drawing.Point(0, 0);
+			this.picPreview.Margin = new System.Windows.Forms.Padding(0);
+			this.picPreview.Name = "picPreview";
+			this.picPreview.Size = new System.Drawing.Size(127, 132);
+			this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+			this.picPreview.TabIndex = 1;
+			this.picPreview.TabStop = false;
+			// 
+			// pnlScroller
+			// 
+			this.pnlScroller.AutoScroll = true;
+			this.pnlScroller.Controls.Add(this.picPreview);
+			this.pnlScroller.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pnlScroller.Location = new System.Drawing.Point(0, 0);
+			this.pnlScroller.Name = "pnlScroller";
+			this.pnlScroller.Size = new System.Drawing.Size(150, 150);
+			this.pnlScroller.TabIndex = 2;
+			// 
 			// PreviewControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ContextMenuStrip = this.mnuContext;
-			this.Controls.Add(this.picPreview);
+			this.Controls.Add(this.pnlScroller);
 			this.Name = "PreviewControl";
-			((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
 			this.mnuContext.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
+			this.pnlScroller.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.PictureBox picPreview;
 		private System.Windows.Forms.ContextMenuStrip mnuContext;
 		private System.Windows.Forms.ToolStripMenuItem itmPrint;
+		private System.Windows.Forms.PictureBox picPreview;
+		private System.Windows.Forms.Panel pnlScroller;
 	}
 }

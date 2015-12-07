@@ -15,6 +15,8 @@ namespace PreviewIo
 			_context = context;
 			InitializeComponent();
 			picPreview.Image = preview;
+			picPreview.Size = preview.Size;
+			pnlScroller.AutoScrollMinSize = preview.Size;
 		}
 
 		private void itmPrint_Click(object sender, System.EventArgs e)
