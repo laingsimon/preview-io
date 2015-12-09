@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -22,7 +23,8 @@ namespace PreviewIo
 		{
 			try
 			{
-				var tempFile = Path.ChangeExtension(Path.GetTempFileName(), ".png");
+				var tempFile = _CreateTempFile();
+
 				picPreview.Image.Save(tempFile, ImageFormat.Png);
 
 				var process = Process.Start(new ProcessStartInfo
@@ -34,7 +36,7 @@ namespace PreviewIo
 				process.EnableRaisingEvents = true;
 				process.Exited += (s, args) => _DeleteTempFile(tempFile);
 			}
-			catch (System.Exception exc)
+			catch (Exception exc)
 			{
 				if (ParentForm == null)
 					throw;
@@ -45,6 +47,18 @@ namespace PreviewIo
 				{
 					Dock = DockStyle.Fill
 				});
+			}
+		}
+
+		private static string _CreateTempFile()
+		{
+			try
+			{
+				return Path.ChangeExtension(Path.GetTempFileName(), ".png");
+			}
+			catch (Exception exc)
+			{
+				throw new IOException("Could not create temporary file for printing - " + exc.Message);
 			}
 		}
 
