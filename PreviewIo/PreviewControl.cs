@@ -223,10 +223,12 @@ namespace PreviewIo
 				? string.Format(" (x{0:n0}%)", _currentZoom.Value * 100)
 				: "";
 
+			var size = _context.DrawingSize ?? picPreview.Image.Size;
+
 			itmDrawingDetails.Text = string.Format(
 				"{0} x {1}{2}",
-				_originalPreview.Size.Width,
-				_originalPreview.Size.Height,
+				size.Width,
+				size.Height,
 				zoom);
 		}
 
