@@ -17,6 +17,7 @@ namespace PreviewIo
 			InitializeComponent();
 			picPreview.Image = preview;
 			picPreview.Size = preview.Size;
+			DoubleBuffered = true;
 		}
 
 		private void itmPrint_Click(object sender, System.EventArgs e)

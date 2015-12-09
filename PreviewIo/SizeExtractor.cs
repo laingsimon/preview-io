@@ -1,7 +1,5 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
-using System.IO.Compression;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
@@ -18,7 +16,7 @@ namespace PreviewIo
 	{
 		public async Task<Size> ExtractSize(Stream fileContent, CancellationToken token)
 		{
-			return await Task.Factory.StartNew<Size>(() =>
+			return await Task.Factory.StartNew(() =>
 			{
 				try
 				{
@@ -32,10 +30,10 @@ namespace PreviewIo
 				{
 					fileContent.Position = 0;
 				}
-			});
+			}, token);
 		}
 
-		private Size _ReadSizeFromDocument(XDocument document)
+		private static Size _ReadSizeFromDocument(XDocument document)
 		{
 			var rootNode = document.Root;
 			var rootNodeName = rootNode.Name.LocalName;
@@ -48,7 +46,7 @@ namespace PreviewIo
 			return new Size(int.Parse(dx), int.Parse(dy));
 		}
 
-		private XElement _UnCompressDocument(XElement diagram)
+		private static XElement _UnCompressDocument(XElement diagram)
 		{
 			var stream = CompressedXmlStream.Read(diagram.Value);
 			using (var reader = new StreamReader(stream))

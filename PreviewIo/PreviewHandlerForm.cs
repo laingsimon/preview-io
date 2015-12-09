@@ -22,10 +22,7 @@ namespace PreviewIo
 
 		private void _ViewPortChanged(object sender, EventArgs e)
 		{
-			_InvokeOnUiThread(delegate
-			{
-				_UpdateSize();
-			});
+			_InvokeOnUiThread(_UpdateSize);
 		}
 
 		private void _PreviewRequired(object sender, EventArgs e)
@@ -33,10 +30,7 @@ namespace PreviewIo
 			if (!_context.DisplayPreview)
 				return;
 
-			_InvokeOnUiThread(delegate
-			{
-				_UpdatePreview();
-			});
+			_InvokeOnUiThread(_UpdatePreview);
 		}
 
 		private void _InvokeOnUiThread(MethodInvoker method)
@@ -95,13 +89,10 @@ namespace PreviewIo
 
 		public void Reset()
 		{
-			_InvokeOnUiThread(delegate
-			{
-				_Reset();
-			});
+			_InvokeOnUiThread(_Reset);
 		}
 
-		public void _Reset()
+		private void _Reset()
 		{
 			_ReplaceControl(new LoadingControl());
 		}
