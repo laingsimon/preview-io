@@ -30,13 +30,13 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			this.mnuContext = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.itmDrawingDetails = new System.Windows.Forms.ToolStripMenuItem();
 			this.itmPrint = new System.Windows.Forms.ToolStripMenuItem();
 			this.itmCentreImage = new System.Windows.Forms.ToolStripMenuItem();
 			this.itmZoomIn = new System.Windows.Forms.ToolStripMenuItem();
 			this.itmZoomOut = new System.Windows.Forms.ToolStripMenuItem();
 			this.picPreview = new System.Windows.Forms.PictureBox();
 			this.pnlScroller = new System.Windows.Forms.Panel();
-			this.itmDrawingDetails = new System.Windows.Forms.ToolStripMenuItem();
 			this.mnuContext.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
 			this.pnlScroller.SuspendLayout();
@@ -51,7 +51,14 @@
             this.itmZoomIn,
             this.itmZoomOut});
 			this.mnuContext.Name = "mnuContext";
-			this.mnuContext.Size = new System.Drawing.Size(157, 136);
+			this.mnuContext.Size = new System.Drawing.Size(157, 114);
+			// 
+			// itmDrawingDetails
+			// 
+			this.itmDrawingDetails.Enabled = false;
+			this.itmDrawingDetails.Name = "itmDrawingDetails";
+			this.itmDrawingDetails.Size = new System.Drawing.Size(156, 22);
+			this.itmDrawingDetails.Text = "Drawing Details";
 			// 
 			// itmPrint
 			// 
@@ -93,6 +100,9 @@
 			this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.picPreview.TabIndex = 1;
 			this.picPreview.TabStop = false;
+			this.picPreview.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseDown);
+			this.picPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseMove);
+			this.picPreview.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseUp);
 			// 
 			// pnlScroller
 			// 
@@ -103,13 +113,6 @@
 			this.pnlScroller.Name = "pnlScroller";
 			this.pnlScroller.Size = new System.Drawing.Size(150, 150);
 			this.pnlScroller.TabIndex = 2;
-			// 
-			// itmDrawingDetails
-			// 
-			this.itmDrawingDetails.Enabled = false;
-			this.itmDrawingDetails.Name = "itmDrawingDetails";
-			this.itmDrawingDetails.Size = new System.Drawing.Size(156, 22);
-			this.itmDrawingDetails.Text = "Drawing Details";
 			// 
 			// PreviewControl
 			// 

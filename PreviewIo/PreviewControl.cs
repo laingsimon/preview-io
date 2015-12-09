@@ -17,6 +17,9 @@ namespace PreviewIo
 		private readonly Image _originalPreview;
 		private float? _currentZoom;
 		private bool _ctrlPressed;
+		private bool _shouldPan;
+		private Point _panOrigin;
+		private Point _scrollOrigin;
 
 		public PreviewControl(Image preview, PreviewContext context)
 		{
@@ -129,6 +132,7 @@ namespace PreviewIo
 			pnlScroller.AutoScroll = !itmCentreImage.Checked;
 			picPreview.SizeMode = PictureBoxSizeMode.Zoom;
 			_currentZoom = null;
+			picPreview_MouseUp(null, null);
 			_UpdateDrawingDetails();
 		}
 
@@ -222,6 +226,53 @@ namespace PreviewIo
 				_originalPreview.Size.Width,
 				_originalPreview.Size.Height,
 				zoom);
+		}
+
+		// ReSharper disable InconsistentNaming
+		private void picPreview_MouseDown(object sender, MouseEventArgs e)
+		// ReSharper restore InconsistentNaming
+		{
+			if (!pnlScroller.AutoScroll || e.Button != MouseButtons.Left)
+				return;
+
+			picPreview.Cursor = Cursors.SizeAll;
+			_shouldPan = true;
+			_panOrigin = new Point(
+				e.Location.X + pnlScroller.AutoScrollPosition.X,
+				e.Location.Y + pnlScroller.AutoScrollPosition.Y);
+			_scrollOrigin = pnlScroller.AutoScrollPosition;
+		}
+
+		// ReSharper disable InconsistentNaming
+		private void picPreview_MouseUp(object sender, MouseEventArgs e)
+		// ReSharper restore InconsistentNaming
+		{
+			picPreview.Cursor = Cursors.Default;
+			_shouldPan = false;
+			_panOrigin = Point.Empty;
+			_scrollOrigin = Point.Empty;
+		}
+
+		// ReSharper disable InconsistentNaming
+		private void picPreview_MouseMove(object sender, MouseEventArgs e)
+		// ReSharper restore InconsistentNaming
+		{
+			if (!_shouldPan)
+				return;
+
+			var currentLocation = new Point(
+				e.Location.X + pnlScroller.AutoScrollPosition.X,
+				e.Location.Y + pnlScroller.AutoScrollPosition.Y);
+
+			var movement = new Point(
+				currentLocation.X - _panOrigin.X,
+				currentLocation.Y - _panOrigin.Y);
+
+			var newScroll = new Point(
+				0 - _scrollOrigin.X - movement.X,
+				0 - _scrollOrigin.Y - movement.Y);
+
+			pnlScroller.AutoScrollPosition = newScroll;
 		}
 	}
 }
