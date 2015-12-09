@@ -5,6 +5,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
+using PreviewIo.ComInterop;
 
 namespace PreviewIo
 {
@@ -70,14 +71,8 @@ namespace PreviewIo
 
 				_originalPreview.Save(tempFile, ImageFormat.Png);
 
-				var process = Process.Start(new ProcessStartInfo
-				{
-					FileName = tempFile,
-					UseShellExecute = true,
-					Verb = "print"
-				});
-				process.EnableRaisingEvents = true;
-				process.Exited += (s, args) => _DeleteTempFile(tempFile);
+				Wia.Print(this, tempFile);
+				_DeleteTempFile(tempFile);
 			}
 			catch (Exception exc)
 			{
