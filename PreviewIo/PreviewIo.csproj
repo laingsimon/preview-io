@@ -127,6 +127,9 @@
     <EmbeddedResource Include="PreviewControl.resx">
       <DependentUpon>PreviewControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PreviewHandlerForm.resx">
+      <DependentUpon>PreviewHandlerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

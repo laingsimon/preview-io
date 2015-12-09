@@ -103,5 +103,18 @@ namespace PreviewIo
 			Controls.Add(control);
 			control.Dock = DockStyle.Fill;
 		}
+
+		private void InitializeComponent()
+		{
+			this.SuspendLayout();
+			// 
+			// PreviewHandlerForm
+			// 
+			this.ClientSize = new System.Drawing.Size(284, 262);
+			this.KeyPreview = true;
+			this.Name = "PreviewHandlerForm";
+			this.ResumeLayout(false);
+
+		}
 	}
 }
