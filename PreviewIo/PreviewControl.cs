@@ -16,7 +16,6 @@ namespace PreviewIo
 			InitializeComponent();
 			picPreview.Image = preview;
 			picPreview.Size = preview.Size;
-			pnlScroller.AutoScrollMinSize = preview.Size;
 		}
 
 		private void itmPrint_Click(object sender, System.EventArgs e)
@@ -52,6 +51,17 @@ namespace PreviewIo
 				File.Delete(filePath);
 			}
 			catch { }
+		}
+
+		private void itmCentreImage_Click(object sender, System.EventArgs e)
+		{
+			itmCentreImage.Checked = !itmCentreImage.Checked;
+
+			pnlScroller.AutoScrollMinSize = itmCentreImage.Checked
+				? Size.Empty
+				: picPreview.Image.Size;
+
+			pnlScroller.AutoScroll = !itmCentreImage.Checked;
 		}
 	}
 }

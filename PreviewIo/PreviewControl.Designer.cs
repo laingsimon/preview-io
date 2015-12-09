@@ -31,6 +31,7 @@
 			this.components = new System.ComponentModel.Container();
 			this.mnuContext = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.itmPrint = new System.Windows.Forms.ToolStripMenuItem();
+			this.itmCentreImage = new System.Windows.Forms.ToolStripMenuItem();
 			this.picPreview = new System.Windows.Forms.PictureBox();
 			this.pnlScroller = new System.Windows.Forms.Panel();
 			this.mnuContext.SuspendLayout();
@@ -41,24 +42,35 @@
 			// mnuContext
 			// 
 			this.mnuContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.itmPrint});
+            this.itmPrint,
+            this.itmCentreImage});
 			this.mnuContext.Name = "mnuContext";
-			this.mnuContext.Size = new System.Drawing.Size(100, 26);
+			this.mnuContext.Size = new System.Drawing.Size(146, 48);
 			// 
 			// itmPrint
 			// 
 			this.itmPrint.Name = "itmPrint";
-			this.itmPrint.Size = new System.Drawing.Size(99, 22);
+			this.itmPrint.Size = new System.Drawing.Size(145, 22);
 			this.itmPrint.Text = "Print";
 			this.itmPrint.Click += new System.EventHandler(this.itmPrint_Click);
 			// 
+			// itmCentreImage
+			// 
+			this.itmCentreImage.Checked = true;
+			this.itmCentreImage.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.itmCentreImage.Name = "itmCentreImage";
+			this.itmCentreImage.Size = new System.Drawing.Size(145, 22);
+			this.itmCentreImage.Text = "Centre Image";
+			this.itmCentreImage.Click += new System.EventHandler(this.itmCentreImage_Click);
+			// 
 			// picPreview
 			// 
+			this.picPreview.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.picPreview.Location = new System.Drawing.Point(0, 0);
 			this.picPreview.Margin = new System.Windows.Forms.Padding(0);
 			this.picPreview.Name = "picPreview";
-			this.picPreview.Size = new System.Drawing.Size(127, 132);
-			this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+			this.picPreview.Size = new System.Drawing.Size(150, 150);
+			this.picPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.picPreview.TabIndex = 1;
 			this.picPreview.TabStop = false;
 			// 
@@ -91,5 +103,6 @@
 		private System.Windows.Forms.ToolStripMenuItem itmPrint;
 		private System.Windows.Forms.PictureBox picPreview;
 		private System.Windows.Forms.Panel pnlScroller;
+		private System.Windows.Forms.ToolStripMenuItem itmCentreImage;
 	}
 }
