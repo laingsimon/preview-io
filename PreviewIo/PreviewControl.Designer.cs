@@ -90,6 +90,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ContextMenuStrip = this.mnuContext;
 			this.Controls.Add(this.pnlScroller);
+			this.DoubleBuffered = true;
 			this.Name = "PreviewControl";
 			this.mnuContext.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();

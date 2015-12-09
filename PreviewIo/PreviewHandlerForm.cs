@@ -61,8 +61,8 @@ namespace PreviewIo
 				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(_context.Settings);
 				var generator = previewGeneratorFactory.Create();
 
-				var drawingSize = await drawing.GetSize(new SizeExtractor(), _context.TokenSource.Token);
-				var previewSize = _IncreaseSizeForPrint(drawingSize) ?? _context.Settings.Resolution;
+				_context.DrawingSize = await drawing.GetSize(new SizeExtractor(), _context.TokenSource.Token);
+				var previewSize = _context.GetPreviewSize();
 				var preview = await drawing.GeneratePreview(generator, previewSize, _context.TokenSource.Token);
 
 				try
@@ -85,15 +85,6 @@ namespace PreviewIo
 			{
 				_ReplaceControl(new ErrorControl(exc));
 			}
-		}
-
-		private static Size? _IncreaseSizeForPrint(Size? drawingSize)
-		{
-			if (drawingSize == null)
-				return null;
-
-			var size = drawingSize.Value;
-			return new Size(size.Width * 4, size.Height * 4);
 		}
 
 		public void Reset()

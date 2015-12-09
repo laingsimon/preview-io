@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
@@ -10,23 +11,45 @@ namespace PreviewIo
 	internal partial class PreviewControl : UserControl
 	{
 		private readonly PreviewContext _context;
+		private readonly Image _originalPreview;
 
 		public PreviewControl(Image preview, PreviewContext context)
 		{
+			_originalPreview = preview;
 			_context = context;
 			InitializeComponent();
-			picPreview.Image = preview;
+			picPreview.Image = _ResizePreviewImageToActualSize(preview, context.DrawingSize);
 			picPreview.Size = preview.Size;
-			DoubleBuffered = true;
 		}
 
-		private void itmPrint_Click(object sender, System.EventArgs e)
+		private static Image _ResizePreviewImageToActualSize(Image preview, Size? drawingSize)
+		{
+			if (drawingSize == null)
+				return preview;
+
+			var newSize = drawingSize.Value;
+			var image = new Bitmap(newSize.Width, newSize.Height, PixelFormat.Format32bppArgb);
+			using (var graphics = Graphics.FromImage(image))
+			{
+				graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+				graphics.SmoothingMode = SmoothingMode.HighQuality;
+				graphics.CompositingQuality = CompositingQuality.HighQuality;
+
+				graphics.DrawImage(preview, new Rectangle(Point.Empty, newSize));
+			}
+
+			return image;
+		}
+
+		// ReSharper disable InconsistentNaming
+		private void itmPrint_Click(object sender, EventArgs e)
+			// ReSharper restore InconsistentNaming
 		{
 			try
 			{
 				var tempFile = _CreateTempFile();
 
-				picPreview.Image.Save(tempFile, ImageFormat.Png);
+				_originalPreview.Save(tempFile, ImageFormat.Png);
 
 				var process = Process.Start(new ProcessStartInfo
 				{
@@ -69,10 +92,14 @@ namespace PreviewIo
 			{
 				File.Delete(filePath);
 			}
+				// ReSharper disable EmptyGeneralCatchClause
 			catch { }
+			// ReSharper restore EmptyGeneralCatchClause
 		}
 
-		private void itmCentreImage_Click(object sender, System.EventArgs e)
+		// ReSharper disable InconsistentNaming
+		private void itmCentreImage_Click(object sender, EventArgs e)
+			// ReSharper restore InconsistentNaming
 		{
 			itmCentreImage.Checked = !itmCentreImage.Checked;
 

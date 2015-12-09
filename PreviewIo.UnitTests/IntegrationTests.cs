@@ -17,7 +17,7 @@ namespace PreviewIo.UnitTests
 			var settings = new PreviewSettings
 			{
 				RenderingFormat = ImageFormat.Png,
-				Resolution = new Size(100, 100)
+				UpScaleForPrint = 4
 			};
 
 			using (var fileStream = File.OpenRead(@"..\..\..\" + fileName))

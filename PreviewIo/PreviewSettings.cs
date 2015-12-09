@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Drawing;
+﻿using System.Configuration;
 using System.Drawing.Imaging;
 using System.Reflection;
 
@@ -8,12 +6,12 @@ namespace PreviewIo
 {
 	internal class PreviewSettings
 	{
-		public Size Resolution { get; set; }
+		public int UpScaleForPrint { get; set; }
 		public ImageFormat RenderingFormat { get; set; }
 
 		public PreviewSettings()
 		{
-			Resolution = _ReadSize(ConfigurationManager.AppSettings["size"], new Size(1000, 1000));
+			UpScaleForPrint = _ReadInt(ConfigurationManager.AppSettings["upScale"], 4);
 			RenderingFormat = _ReadImageFormat(ConfigurationManager.AppSettings["format"], ImageFormat.Png);
 		}
 
@@ -29,16 +27,15 @@ namespace PreviewIo
 			return (ImageFormat)property.GetValue(null);
 		}
 
-		private static Size _ReadSize(string value, Size defaultSize)
+		private static int _ReadInt(string value, int defaultResolution)
 		{
 			if (string.IsNullOrEmpty(value))
-				return defaultSize;
+				return defaultResolution;
 
-			int scale;
-			if (!int.TryParse(value, out scale))
-				return defaultSize;
-
-			return new Size(scale, scale);
+			int resolution;
+			return !int.TryParse(value, out resolution)
+				? defaultResolution
+				: resolution;
 		}
 	}
 }

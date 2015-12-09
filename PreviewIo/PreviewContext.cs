@@ -16,6 +16,7 @@ namespace PreviewIo
 		public Stream FileStream { get; private set; }
 		public PreviewSettings Settings { get; }
 		public CancellationTokenSource TokenSource { get; private set; }
+		public Size? DrawingSize { get; set; }
 
 		public PreviewContext()
 		{
@@ -23,14 +24,13 @@ namespace PreviewIo
 			Settings = new PreviewSettings
 			{
 				RenderingFormat = ImageFormat.Png,
-				Resolution = new Size(1000, 1000)
+				UpScaleForPrint = 4,
 			};
 		}
 
 		public void OnViewPortChanged(Rectangle newSize)
 		{
 			ViewPort = newSize;
-			Settings.Resolution = new Size(newSize.Width * 2, newSize.Height * 2);
 
 			ViewPortChanged?.Invoke(this, EventArgs.Empty);
 		}
@@ -43,5 +43,20 @@ namespace PreviewIo
 			DisplayPreview = true;
 			PreviewRequired?.Invoke(this, EventArgs.Empty);
 		}
+
+		public Size GetPreviewSize()
+		{
+			return _IncreaseSizeForPrint(DrawingSize) ?? ViewPort.Size;
+		}
+
+		private Size? _IncreaseSizeForPrint(Size? drawingSize)
+		{
+			if (drawingSize == null)
+				return null;
+
+			var size = drawingSize.Value;
+			return new Size(size.Width * Settings.UpScaleForPrint, size.Height * Settings.UpScaleForPrint);
+		}
+
 	}
 }
