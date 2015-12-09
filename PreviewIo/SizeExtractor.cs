@@ -43,7 +43,15 @@ namespace PreviewIo
 			var dx = rootNode.Attribute("dx").Value;
 			var dy = rootNode.Attribute("dy").Value;
 
-			return new Size(int.Parse(dx), int.Parse(dy));
+			var size = new Size(int.Parse(dx), int.Parse(dy));
+			if (size.Width > 0 && size.Height > 0)
+				return size;
+
+			var pageWidth = rootNode.Attribute("pageWidth").Value;
+			var pageHeight = rootNode.Attribute("pageHeight").Value;
+
+			var pageSize = new Size(int.Parse(pageWidth), int.Parse(pageHeight));
+			return pageSize;
 		}
 
 		private static XElement _UnCompressDocument(XElement diagram)
