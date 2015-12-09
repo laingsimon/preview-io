@@ -117,20 +117,22 @@ namespace PreviewIo
 		}
 
 		// ReSharper disable InconsistentNaming
-		private void itmCentreImage_Click(object sender, EventArgs e)
+		private void itmFitImage_Click(object sender, EventArgs e)
 		// ReSharper restore InconsistentNaming
 		{
 			if (_currentZoom != null)
 				picPreview.Image = _ResizePreviewImageToSize(_originalPreview, _context.DrawingSize);
 
-			itmCentreImage.Checked = !itmCentreImage.Checked;
+			itmFitImage.Checked = !itmFitImage.Checked;
 
-			pnlScroller.AutoScrollMinSize = itmCentreImage.Checked
+			pnlScroller.AutoScrollMinSize = itmFitImage.Checked
 				? Size.Empty
 				: picPreview.Image.Size;
 
-			pnlScroller.AutoScroll = !itmCentreImage.Checked;
-			picPreview.SizeMode = PictureBoxSizeMode.Zoom;
+			pnlScroller.AutoScroll = !itmFitImage.Checked;
+			picPreview.SizeMode = itmFitImage.Checked
+				? PictureBoxSizeMode.Zoom
+				: PictureBoxSizeMode.CenterImage;
 			_currentZoom = null;
 			picPreview_MouseUp(null, null);
 			_UpdateDrawingDetails();
@@ -157,7 +159,7 @@ namespace PreviewIo
 			picPreview.Image = _ResizePreviewImageToZoom(_originalPreview, _currentZoom.Value);
 			itmZoomIn.Enabled = _currentZoom.Value <= _maxZoom;
 			itmZoomOut.Enabled = _currentZoom.Value >= _minZoom;
-			itmCentreImage.Checked = false;
+			itmFitImage.Checked = false;
 			pnlScroller.AutoScrollMinSize = picPreview.Image.Size;
 			pnlScroller.AutoScroll = true;
 			picPreview.SizeMode = PictureBoxSizeMode.CenterImage;
