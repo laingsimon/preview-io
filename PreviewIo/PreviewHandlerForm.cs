@@ -15,9 +15,7 @@ namespace PreviewIo
 			context.PreviewRequired += _PreviewRequired;
 			context.ViewPortChanged += _ViewPortChanged;
 
-			FormBorderStyle = FormBorderStyle.None;
-			BackColor = SystemColors.Window;
-			DoubleBuffered = true;
+			InitializeComponent();
 		}
 
 		private void _ViewPortChanged(object sender, EventArgs e)
@@ -107,10 +105,13 @@ namespace PreviewIo
 		private void InitializeComponent()
 		{
 			this.SuspendLayout();
-			// 
+			//
 			// PreviewHandlerForm
-			// 
+			//
+			this.BackColor = System.Drawing.SystemColors.Window;
 			this.ClientSize = new System.Drawing.Size(284, 262);
+			this.DoubleBuffered = true;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.KeyPreview = true;
 			this.Name = "PreviewHandlerForm";
 			this.ResumeLayout(false);
