@@ -9,12 +9,12 @@ namespace PreviewIo
 {
 	public interface ISizeExtractor
 	{
-		Task<Size?> ExtractSize(Stream fileContent, CancellationToken token);
+		Task<Size?> ExtractSize(Stream fileContent, FileDetail fileDetail, CancellationToken token);
 	}
 
 	public class SizeExtractor : ISizeExtractor
 	{
-		public async Task<Size?> ExtractSize(Stream fileContent, CancellationToken token)
+		public async Task<Size?> ExtractSize(Stream fileContent, FileDetail fileDetail, CancellationToken token)
 		{
 			return await Task.Factory.StartNew(() =>
 			{

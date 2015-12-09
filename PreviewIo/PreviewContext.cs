@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
 
@@ -17,6 +16,7 @@ namespace PreviewIo
 		public PreviewSettings Settings { get; }
 		public CancellationTokenSource TokenSource { get; private set; }
 		public Size? DrawingSize { get; set; }
+		public FileDetail FileDetail { get; private set; }
 
 		public PreviewContext()
 		{
@@ -31,11 +31,12 @@ namespace PreviewIo
 			ViewPortChanged?.Invoke(this, EventArgs.Empty);
 		}
 
-		public void OnPreviewRequired(Stream stream)
+		public void OnPreviewRequired(Stream stream, FileDetail fileDetail)
 		{
 			TokenSource.Cancel();
 			TokenSource = new CancellationTokenSource();
 			FileStream = stream;
+			FileDetail = fileDetail;
 			DisplayPreview = true;
 			PreviewRequired?.Invoke(this, EventArgs.Empty);
 		}

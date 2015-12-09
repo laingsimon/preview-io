@@ -33,7 +33,7 @@ namespace PreviewIo
 
 		public IPreviewGenerator Create()
 		{
-			return new HttpPreviewGenerator(
+			var httpGenerator = new HttpPreviewGenerator(
 				_settings,
 				new HttpClient(new HttpClientHandler
 				{
@@ -41,6 +41,8 @@ namespace PreviewIo
 					UseProxy = _proxyUrl != null
 				}),
 				_previewUrl);
+
+			return new CachingPreviewGenerator(httpGenerator);
 		}
 
 		private WebProxy _GetProxy()

@@ -7,6 +7,6 @@ namespace PreviewIo
 {
 	internal interface IPreviewGenerator
 	{
-		Task<Stream> GeneratePreview(Stream drawingContent, Size previewSize, CancellationToken token);
+		Task<Stream> GeneratePreview(Stream drawingContent, FileDetail fileDetail, Size previewSize, CancellationToken token);
 	}
 }

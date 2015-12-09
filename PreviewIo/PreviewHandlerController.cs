@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Windows.Forms;
 using PreviewIo.ComInterop;
+using STATSTG = System.Runtime.InteropServices.ComTypes.STATSTG;
 
 namespace PreviewIo
 {
@@ -21,6 +22,7 @@ namespace PreviewIo
 		private IntPtr _previewWindowHandle;
 		private Stream _previewFileStream = Stream.Null;
 		private IPreviewHandlerFrame _frame;
+		private FileDetail _fileDetail;
 
 		public PreviewHandlerController()
 		{
@@ -31,7 +33,12 @@ namespace PreviewIo
 				Trace.TraceInformation("Creating PreviewHandlerController");
 
 				_context = new PreviewContext();
-				_previewForm = new PreviewHandlerForm(_context);
+
+				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(_context.Settings);
+				var generator = previewGeneratorFactory.Create();
+				var sizeExtractor = new CachingSizeExtractor(new SizeExtractor());
+
+				_previewForm = new PreviewHandlerForm(_context, sizeExtractor, generator);
 				_previewForm.Handle.GetHashCode(); //initialse the form
 			}
 			catch (Exception exc)
@@ -47,12 +54,23 @@ namespace PreviewIo
 				Trace.TraceInformation("Initialising with a stream");
 
 				_previewForm.Reset();
+				_fileDetail = _GetPreviewFileDetail(pstream);
 				_previewFileStream = pstream.ToStream().ToMemoryStream();
 			}
 			catch (Exception exc)
 			{
 				Trace.TraceError("PreviewHandlerController.Initialize: {0}", exc);
 			}
+		}
+
+		private static FileDetail _GetPreviewFileDetail(IStream pstream)
+		{
+			STATSTG stats;
+			pstream.Stat(out stats, 0);
+
+			return new FileDetail(
+				stats.pwcsName,
+				DateTime.FromFileTime(stats.mtime.dwHighDateTime));
 		}
 
 		void IPreviewHandler.SetWindow(IntPtr hwnd, ref RECT rect)
@@ -100,7 +118,7 @@ namespace PreviewIo
 
 				if (_previewFileStream != Stream.Null)
 				{
-					_context.OnPreviewRequired(_previewFileStream);
+					_context.OnPreviewRequired(_previewFileStream, _fileDetail);
 					WinApi.SetParent(_previewForm.Handle, _previewWindowHandle); //is this required? - if not then remove _previewWindowHandle
 				}
 				else

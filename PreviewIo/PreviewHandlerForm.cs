@@ -8,10 +8,14 @@ namespace PreviewIo
 	internal class PreviewHandlerForm : Form
 	{
 		private readonly PreviewContext _context;
+		private readonly ISizeExtractor _sizeExtractor;
+		private readonly IPreviewGenerator _previewGenerator;
 
-		public PreviewHandlerForm(PreviewContext context)
+		public PreviewHandlerForm(PreviewContext context, ISizeExtractor sizeExtractor, IPreviewGenerator previewGenerator)
 		{
 			_context = context;
+			_sizeExtractor = sizeExtractor;
+			_previewGenerator = previewGenerator;
 			context.PreviewRequired += _PreviewRequired;
 			context.ViewPortChanged += _ViewPortChanged;
 
@@ -55,13 +59,11 @@ namespace PreviewIo
 					return;
 				}
 
-				var drawing = new Drawing(_context.FileStream);
-				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(_context.Settings);
-				var generator = previewGeneratorFactory.Create();
+				var drawing = new Drawing(_context.FileStream, _context.FileDetail);
 
-				_context.DrawingSize = await drawing.GetSize(new SizeExtractor(), _context.TokenSource.Token);
+				_context.DrawingSize = await drawing.GetSize(_sizeExtractor, _context.TokenSource.Token);
 				var previewSize = _context.GetPreviewSize();
-				var preview = await drawing.GeneratePreview(generator, previewSize, _context.TokenSource.Token);
+				var preview = await drawing.GeneratePreview(_previewGenerator, previewSize, _context.TokenSource.Token);
 
 				try
 				{
@@ -71,6 +73,8 @@ namespace PreviewIo
 				}
 				catch (Exception exc)
 				{
+					CachingPreviewGenerator.EvictFromCache(_context.FileDetail);
+
 					using (var reader = new StreamReader(preview))
 					{
 						var responseBody = reader.ReadToEnd();

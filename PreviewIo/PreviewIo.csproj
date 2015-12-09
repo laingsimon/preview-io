@@ -48,7 +48,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CachingPreviewGenerator.cs" />
+    <Compile Include="CachingSizeExtractor.cs" />
     <Compile Include="ComInterop\WIA.cs" />
+    <Compile Include="FileDetail.cs" />
     <Compile Include="UrlEncodingStream.cs" />
     <Compile Include="Base64Stream.cs" />
     <Compile Include="ComInterop\COLORREF.cs" />

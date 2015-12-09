@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Threading;
@@ -22,7 +23,7 @@ namespace PreviewIo.UnitTests
 
 			using (var fileStream = File.OpenRead(@"..\..\..\" + fileName))
 			{
-				var drawing = new Drawing(fileStream);
+				var drawing = new Drawing(fileStream, new FileDetail("file", DateTime.MinValue));
 				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(settings);
 				var generator = previewGeneratorFactory.Create();
 
