@@ -46,7 +46,7 @@ namespace PreviewIo
 
 		public Size GetPreviewSize()
 		{
-			return _IncreaseSizeForPrint(DrawingSize) ?? ViewPort.Size;
+			return _IncreaseSizeForPrint(DrawingSize) ?? Size.Empty;
 		}
 
 		private Size? _IncreaseSizeForPrint(Size? drawingSize)
@@ -58,5 +58,12 @@ namespace PreviewIo
 			return new Size(size.Width * Settings.UpScaleForPrint, size.Height * Settings.UpScaleForPrint);
 		}
 
+		public void RecalculateDrawingSize(Size upscaledPreviewSize)
+		{
+			var actualSize = new Size(
+				upscaledPreviewSize.Width / Settings.UpScaleForPrint,
+				upscaledPreviewSize.Height / Settings.UpScaleForPrint);
+			DrawingSize = actualSize;
+		}
 	}
 }

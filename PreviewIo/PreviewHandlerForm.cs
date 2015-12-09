@@ -66,6 +66,7 @@ namespace PreviewIo
 				try
 				{
 					var image = Image.FromStream(preview);
+					_context.RecalculateDrawingSize(image.Size);
 					_ReplaceControl(new PreviewControl(image, _context));
 				}
 				catch (Exception exc)
