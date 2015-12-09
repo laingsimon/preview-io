@@ -36,8 +36,12 @@ namespace PreviewIo
 			}
 			catch (System.Exception exc)
 			{
-				ParentForm.Controls.Clear();
-				ParentForm.Controls.Add(new ErrorControl(exc)
+				if (ParentForm == null)
+					throw;
+
+				var parentForm = ParentForm; //we have to store a reference to the ParentForm as it will be removed when this control is remove from it (by Controls.Clear())
+				parentForm.Controls.Clear();
+				parentForm.Controls.Add(new ErrorControl(exc)
 				{
 					Dock = DockStyle.Fill
 				});
