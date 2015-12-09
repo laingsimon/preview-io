@@ -18,8 +18,8 @@ namespace PreviewIo.UnitTests
 			var contentStream = new MemoryStream(Encoding.UTF8.GetBytes(compressedSampleFile));
 			var result = await extractor.ExtractSize(contentStream, CancellationToken.None);
 
-			Assert.That(result.Width, Is.EqualTo(880));
-			Assert.That(result.Height, Is.EqualTo(448));
+			Assert.That(result.Value.Width, Is.EqualTo(880));
+			Assert.That(result.Value.Height, Is.EqualTo(448));
 		}
 
 		[Test]
@@ -32,8 +32,8 @@ namespace PreviewIo.UnitTests
 
 			var result = await extractor.ExtractSize(contentStream, CancellationToken.None);
 
-			Assert.That(result.Width, Is.EqualTo(880));
-			Assert.That(result.Height, Is.EqualTo(492));
+			Assert.That(result.Value.Width, Is.EqualTo(880));
+			Assert.That(result.Value.Height, Is.EqualTo(492));
 		}
 
 		[Test]

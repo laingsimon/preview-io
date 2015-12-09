@@ -9,12 +9,12 @@ namespace PreviewIo
 {
 	public interface ISizeExtractor
 	{
-		Task<Size> ExtractSize(Stream fileContent, CancellationToken token);
+		Task<Size?> ExtractSize(Stream fileContent, CancellationToken token);
 	}
 
 	public class SizeExtractor : ISizeExtractor
 	{
-		public async Task<Size> ExtractSize(Stream fileContent, CancellationToken token)
+		public async Task<Size?> ExtractSize(Stream fileContent, CancellationToken token)
 		{
 			return await Task.Factory.StartNew(() =>
 			{
@@ -33,7 +33,7 @@ namespace PreviewIo
 			}, token);
 		}
 
-		private static Size _ReadSizeFromDocument(XDocument document)
+		private static Size? _ReadSizeFromDocument(XDocument document)
 		{
 			var rootNode = document.Root;
 			var rootNodeName = rootNode.Name.LocalName;
@@ -47,11 +47,7 @@ namespace PreviewIo
 			if (size.Width > 0 && size.Height > 0)
 				return size;
 
-			var pageWidth = rootNode.Attribute("pageWidth").Value;
-			var pageHeight = rootNode.Attribute("pageHeight").Value;
-
-			var pageSize = new Size(int.Parse(pageWidth), int.Parse(pageHeight));
-			return pageSize;
+			return null;
 		}
 
 		private static XElement _UnCompressDocument(XElement diagram)
