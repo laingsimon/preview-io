@@ -67,7 +67,7 @@ namespace PreviewIo
 				{
 					var image = Image.FromStream(preview);
 					_context.RecalculateDrawingSize(image.Size);
-					_ReplaceControl(new PreviewControl(image, _context));
+					_InvokeOnUiThread(() => _ReplaceControl(new PreviewControl(image, _context)));
 				}
 				catch (Exception exc)
 				{
@@ -82,7 +82,7 @@ namespace PreviewIo
 			{ }
 			catch (Exception exc)
 			{
-				_ReplaceControl(new ErrorControl(exc));
+				_InvokeOnUiThread(() => _ReplaceControl(new ErrorControl(exc)));
 			}
 		}
 
