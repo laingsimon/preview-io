@@ -21,11 +21,7 @@ namespace PreviewIo
 		public PreviewContext()
 		{
 			TokenSource = new CancellationTokenSource();
-			Settings = new PreviewSettings
-			{
-				RenderingFormat = ImageFormat.Png,
-				UpScaleForPrint = 4,
-			};
+			Settings = new PreviewSettings();
 		}
 
 		public void OnViewPortChanged(Rectangle newSize)
@@ -63,7 +59,35 @@ namespace PreviewIo
 			var actualSize = new Size(
 				upscaledPreviewSize.Width / Settings.UpScaleForPrint,
 				upscaledPreviewSize.Height / Settings.UpScaleForPrint);
+
+			var previousDrawingSize = DrawingSize;
 			DrawingSize = actualSize;
+
+			if (previousDrawingSize == null)
+				return;
+
+			//work out the actual scale of the preview compared to the requested size
+			var scale = new SizeF(
+				((float)actualSize.Width / previousDrawingSize.Value.Width) * Settings.UpScaleForPrint,
+				((float)actualSize.Height / previousDrawingSize.Value.Height) * Settings.UpScaleForPrint);
+
+			var mostAppropriateScale = _GetMostAppropriateScale(scale);
+
+			//reset the drawing size to that of the preview
+			DrawingSize = new Size(
+				upscaledPreviewSize.Width / (int)mostAppropriateScale,
+				upscaledPreviewSize.Height / (int)mostAppropriateScale);
+		}
+
+		private float _GetMostAppropriateScale(SizeF scale)
+		{
+			var widthScale = Math.Abs(Settings.UpScaleForPrint - scale.Width);
+			var heightScale = Math.Abs(Settings.UpScaleForPrint - scale.Height);
+
+			if (widthScale < heightScale)
+				return scale.Height;
+
+			return scale.Width;
 		}
 	}
 }
