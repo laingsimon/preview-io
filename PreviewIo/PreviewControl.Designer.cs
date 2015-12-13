@@ -51,6 +51,7 @@
             this.itmZoomIn,
             this.itmZoomOut});
 			this.mnuContext.Name = "mnuContext";
+			this.mnuContext.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
 			this.mnuContext.Size = new System.Drawing.Size(175, 136);
 			this.mnuContext.Opening += new System.ComponentModel.CancelEventHandler(this.mnuContext_Opening);
 			// 
