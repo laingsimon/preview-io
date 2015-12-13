@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -11,12 +10,12 @@ namespace PreviewIo
 {
 	internal partial class PreviewControl : UserControl
 	{
-		private const float _maxZoom = 2f;
-		private const float _minZoom = 0.3f;
+		private const double _maxZoom = 2d;
+		private const double _minZoom = 0.3d;
 
 		private readonly PreviewContext _context;
 		private readonly Image _originalPreview;
-		private float? _currentZoom;
+		private double? _currentZoom;
 		private bool _ctrlPressed;
 		private bool _shouldPan;
 		private Point _panOrigin;
@@ -35,7 +34,7 @@ namespace PreviewIo
 			_UpdateDrawingDetails();
 		}
 
-		private Image _ResizePreviewImageToZoom(Image preview, float zoom)
+		private Image _ResizePreviewImageToZoom(Image preview, double zoom)
 		{
 			var drawingSize = _context.DrawingSize.Value;
 			var newSize = new Size((int)(drawingSize.Width * zoom), (int)(drawingSize.Height * zoom));
@@ -137,23 +136,36 @@ namespace PreviewIo
 		private void itmZoomIn_Click(object sender, EventArgs e)
 		// ReSharper restore InconsistentNaming
 		{
-			_currentZoom = (_currentZoom ?? 1f) + 0.1f;
-			_UpdateZoom();
+			_UpdateZoom(0.1d);
 		}
 
 		// ReSharper disable InconsistentNaming
 		private void itmZoomOut_Click(object sender, EventArgs e)
 		// ReSharper restore InconsistentNaming
 		{
-			_currentZoom = (_currentZoom ?? 1f) - 0.1f;
-			_UpdateZoom();
+			_UpdateZoom(-0.1d);
 		}
 
-		private void _UpdateZoom()
+		private double _CalculateZoomStart()
 		{
+			var zoom = _CalculateZoom();
+			var roundedZoom = Math.Floor(zoom * 10) / 10;
+
+			return roundedZoom;
+		}
+
+		private void _UpdateZoom(double step)
+		{
+			if (_currentZoom.HasValue)
+				_currentZoom = _currentZoom.Value + step;
+			else
+			{
+				_currentZoom = _CalculateZoomStart();
+				if (_currentZoom.Value == _CalculateZoom())
+					_currentZoom = _currentZoom.Value + step;
+			}
+
 			picPreview.Image = _ResizePreviewImageToZoom(_originalPreview, _currentZoom.Value);
-			itmZoomIn.Enabled = _currentZoom.Value <= _maxZoom;
-			itmZoomOut.Enabled = _currentZoom.Value >= _minZoom;
 			itmFitImage.Checked = false;
 			pnlScroller.AutoScrollMinSize = picPreview.Image.Size;
 			pnlScroller.AutoScroll = true;
@@ -184,39 +196,34 @@ namespace PreviewIo
 			if (!_ctrlPressed)
 				return;
 
-			float? zoomAdjustment = null;
+			double? zoomAdjustment = null;
 
 			switch (e.Type)
 			{
 				case ScrollEventType.LargeIncrement:
-					zoomAdjustment = 0.2f;
+					zoomAdjustment = 0.2d;
 					break;
 				case ScrollEventType.LargeDecrement:
-					zoomAdjustment = -0.2f;
+					zoomAdjustment = -0.2d;
 					break;
 				case ScrollEventType.SmallIncrement:
-					zoomAdjustment = 0.1f;
+					zoomAdjustment = 0.1d;
 					break;
 				case ScrollEventType.SmallDecrement:
-					zoomAdjustment = -0.1f;
+					zoomAdjustment = -0.1d;
 					break;
 			}
 
 			if (zoomAdjustment == null)
 				return;
 
-			var newZoomStart = (_currentZoom + 0.1f) ?? 1f;
-			var newZoom = newZoomStart + zoomAdjustment.Value;
-
-			_currentZoom = Math.Min(Math.Max(newZoom, _minZoom), _maxZoom);
-			_UpdateZoom();
+			_UpdateZoom(zoomAdjustment.Value);
 		}
 
 		private void _UpdateDrawingDetails()
 		{
-			var zoom = _currentZoom.HasValue
-				? string.Format(" (x{0:n0}%)", _currentZoom.Value * 100)
-				: "";
+			var zoomPercentage = _currentZoom ?? _CalculateZoom();
+			var zoom = string.Format(" (x{0:n0}%)", zoomPercentage * 100);
 
 			var size = _context.DrawingSize ?? picPreview.Image.Size;
 
@@ -225,6 +232,14 @@ namespace PreviewIo
 				size.Width,
 				size.Height,
 				zoom);
+		}
+
+		private double _CalculateZoom()
+		{
+			var originalWidth = (double)_context.DrawingSize.Value.Width;
+			var displayWidth = (double)picPreview.Width;
+
+			return Math.Round(displayWidth / originalWidth, 2);
 		}
 
 		// ReSharper disable InconsistentNaming
@@ -272,6 +287,17 @@ namespace PreviewIo
 				0 - _scrollOrigin.Y - movement.Y);
 
 			pnlScroller.AutoScrollPosition = newScroll;
+		}
+
+		// ReSharper disable InconsistentNaming
+		private void mnuContext_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		// ReSharper restore InconsistentNaming
+		{
+			_UpdateDrawingDetails();
+
+			var zoomStart = _CalculateZoom();
+			itmZoomIn.Enabled = zoomStart < _maxZoom;
+			itmZoomOut.Enabled = zoomStart > _minZoom;
 		}
 	}
 }

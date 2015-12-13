@@ -41,9 +41,9 @@
 			((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
 			this.pnlScroller.SuspendLayout();
 			this.SuspendLayout();
-			//
+			// 
 			// mnuContext
-			//
+			// 
 			this.mnuContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.itmDrawingDetails,
             this.itmPrint,
@@ -52,46 +52,47 @@
             this.itmZoomOut});
 			this.mnuContext.Name = "mnuContext";
 			this.mnuContext.Size = new System.Drawing.Size(157, 136);
-			//
+			this.mnuContext.Opening += new System.ComponentModel.CancelEventHandler(this.mnuContext_Opening);
+			// 
 			// itmDrawingDetails
-			//
+			// 
 			this.itmDrawingDetails.Enabled = false;
 			this.itmDrawingDetails.Name = "itmDrawingDetails";
 			this.itmDrawingDetails.Size = new System.Drawing.Size(156, 22);
 			this.itmDrawingDetails.Text = "Drawing Details";
-			//
+			// 
 			// itmPrint
-			//
+			// 
 			this.itmPrint.Name = "itmPrint";
 			this.itmPrint.Size = new System.Drawing.Size(156, 22);
 			this.itmPrint.Text = "Print";
 			this.itmPrint.Click += new System.EventHandler(this.itmPrint_Click);
-			//
+			// 
 			// itmFitImage
-			//
+			// 
 			this.itmFitImage.Checked = true;
 			this.itmFitImage.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.itmFitImage.Name = "itmFitImage";
 			this.itmFitImage.Size = new System.Drawing.Size(156, 22);
 			this.itmFitImage.Text = "Fit Image";
 			this.itmFitImage.Click += new System.EventHandler(this.itmFitImage_Click);
-			//
+			// 
 			// itmZoomIn
-			//
+			// 
 			this.itmZoomIn.Name = "itmZoomIn";
 			this.itmZoomIn.Size = new System.Drawing.Size(156, 22);
 			this.itmZoomIn.Text = "Zoom In";
 			this.itmZoomIn.Click += new System.EventHandler(this.itmZoomIn_Click);
-			//
+			// 
 			// itmZoomOut
-			//
+			// 
 			this.itmZoomOut.Name = "itmZoomOut";
 			this.itmZoomOut.Size = new System.Drawing.Size(156, 22);
 			this.itmZoomOut.Text = "Zoom Out";
 			this.itmZoomOut.Click += new System.EventHandler(this.itmZoomOut_Click);
-			//
+			// 
 			// picPreview
-			//
+			// 
 			this.picPreview.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.picPreview.Location = new System.Drawing.Point(0, 0);
 			this.picPreview.Margin = new System.Windows.Forms.Padding(0);
@@ -103,9 +104,9 @@
 			this.picPreview.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseDown);
 			this.picPreview.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseMove);
 			this.picPreview.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picPreview_MouseUp);
-			//
+			// 
 			// pnlScroller
-			//
+			// 
 			this.pnlScroller.AutoScroll = true;
 			this.pnlScroller.Controls.Add(this.picPreview);
 			this.pnlScroller.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -113,9 +114,9 @@
 			this.pnlScroller.Name = "pnlScroller";
 			this.pnlScroller.Size = new System.Drawing.Size(150, 150);
 			this.pnlScroller.TabIndex = 2;
-			//
+			// 
 			// PreviewControl
-			//
+			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ContextMenuStrip = this.mnuContext;
