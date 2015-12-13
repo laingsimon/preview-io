@@ -51,20 +51,20 @@
             this.itmZoomIn,
             this.itmZoomOut});
 			this.mnuContext.Name = "mnuContext";
-			this.mnuContext.Size = new System.Drawing.Size(157, 136);
+			this.mnuContext.Size = new System.Drawing.Size(175, 136);
 			this.mnuContext.Opening += new System.ComponentModel.CancelEventHandler(this.mnuContext_Opening);
 			// 
 			// itmDrawingDetails
 			// 
 			this.itmDrawingDetails.Enabled = false;
 			this.itmDrawingDetails.Name = "itmDrawingDetails";
-			this.itmDrawingDetails.Size = new System.Drawing.Size(156, 22);
+			this.itmDrawingDetails.Size = new System.Drawing.Size(174, 22);
 			this.itmDrawingDetails.Text = "Drawing Details";
 			// 
 			// itmPrint
 			// 
 			this.itmPrint.Name = "itmPrint";
-			this.itmPrint.Size = new System.Drawing.Size(156, 22);
+			this.itmPrint.Size = new System.Drawing.Size(174, 22);
 			this.itmPrint.Text = "Print";
 			this.itmPrint.Click += new System.EventHandler(this.itmPrint_Click);
 			// 
@@ -73,21 +73,23 @@
 			this.itmFitImage.Checked = true;
 			this.itmFitImage.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.itmFitImage.Name = "itmFitImage";
-			this.itmFitImage.Size = new System.Drawing.Size(156, 22);
+			this.itmFitImage.Size = new System.Drawing.Size(174, 22);
 			this.itmFitImage.Text = "Fit Image";
 			this.itmFitImage.Click += new System.EventHandler(this.itmFitImage_Click);
 			// 
 			// itmZoomIn
 			// 
 			this.itmZoomIn.Name = "itmZoomIn";
-			this.itmZoomIn.Size = new System.Drawing.Size(156, 22);
+			this.itmZoomIn.ShortcutKeyDisplayString = "Ctrl + +";
+			this.itmZoomIn.Size = new System.Drawing.Size(174, 22);
 			this.itmZoomIn.Text = "Zoom In";
 			this.itmZoomIn.Click += new System.EventHandler(this.itmZoomIn_Click);
 			// 
 			// itmZoomOut
 			// 
 			this.itmZoomOut.Name = "itmZoomOut";
-			this.itmZoomOut.Size = new System.Drawing.Size(156, 22);
+			this.itmZoomOut.ShortcutKeyDisplayString = "Ctrl + -";
+			this.itmZoomOut.Size = new System.Drawing.Size(174, 22);
 			this.itmZoomOut.Text = "Zoom Out";
 			this.itmZoomOut.Click += new System.EventHandler(this.itmZoomOut_Click);
 			// 

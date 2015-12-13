@@ -165,6 +165,8 @@ namespace PreviewIo
 					_currentZoom = _currentZoom.Value + step;
 			}
 
+			_currentZoom = Math.Min(Math.Max(_currentZoom.Value, _minZoom), _maxZoom);
+
 			picPreview.Image = _ResizePreviewImageToZoom(_originalPreview, _currentZoom.Value);
 			itmFitImage.Checked = false;
 			pnlScroller.AutoScrollMinSize = picPreview.Image.Size;
@@ -185,6 +187,11 @@ namespace PreviewIo
 		private void PreviewControl_KeyUp(object sender, KeyEventArgs e)
 		// ReSharper restore InconsistentNaming
 		{
+			if (e.KeyCode == Keys.Add && _ctrlPressed)
+				_UpdateZoom(0.1d);
+			if (e.KeyCode == Keys.Subtract && _ctrlPressed)
+				_UpdateZoom(-0.1d);
+
 			if (e.Control)
 				_ctrlPressed = false;
 		}
