@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Http;
 
@@ -27,7 +26,6 @@ namespace PreviewIo
 			if (proxy == previewUrl)
 				return null;
 
-			Trace.TraceInformation("Using proxy: " + proxy);
 			return proxy;
 		}
 

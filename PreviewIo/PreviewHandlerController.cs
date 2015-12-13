@@ -30,8 +30,6 @@ namespace PreviewIo
 			{
 				Logging.InstallListeners();
 
-				Trace.TraceInformation("Creating PreviewHandlerController");
-
 				_context = new PreviewContext();
 
 				var previewGeneratorFactory = new HttpPreviewGeneratorFactory(_context.Settings);
@@ -51,8 +49,6 @@ namespace PreviewIo
 		{
 			try
 			{
-				Trace.TraceInformation("Initialising with a stream");
-
 				_previewForm.Reset();
 				_fileDetail = _GetPreviewFileDetail(pstream);
 				_previewFileStream = pstream.ToStream().ToMemoryStream();
@@ -77,8 +73,6 @@ namespace PreviewIo
 		{
 			try
 			{
-				Trace.TraceInformation("Setting window");
-
 				_previewForm.Invoke(new MethodInvoker(() => _previewForm.Show()));
 
 				_previewWindowHandle = hwnd;
@@ -95,8 +89,6 @@ namespace PreviewIo
 		{
 			try
 			{
-				Trace.TraceInformation("Setting rectangle");
-
 				_previewForm.Invoke(new MethodInvoker(() => _previewForm.Show()));
 
 				_context.OnViewPortChanged(rect.ToRectangle());
@@ -113,7 +105,6 @@ namespace PreviewIo
 		{
 			try
 			{
-				Trace.TraceInformation("Starting preview");
 				_previewForm.Invoke(new MethodInvoker(() => _previewForm.Show()));
 
 				if (_previewFileStream != Stream.Null)
@@ -134,22 +125,16 @@ namespace PreviewIo
 
 		public void Unload()
 		{
-			Trace.TraceInformation("Unloading");
-
 			_previewForm.Invoke(new MethodInvoker(() => _previewForm.Reset()));
 		}
 
 		public void SetFocus()
 		{
-			Trace.TraceInformation("Setting focus");
-
 			_previewForm.Invoke(new MethodInvoker(() => _previewForm.Focus()));
 		}
 
 		public void QueryFocus(out IntPtr phwnd)
 		{
-			Trace.TraceInformation("Querying focus");
-
 			var focusResult = IntPtr.Zero;
 			_previewForm.Invoke(new MethodInvoker(() => WinApi.GetFocus()));
 			if (focusResult == IntPtr.Zero)
@@ -160,8 +145,6 @@ namespace PreviewIo
 
 		uint IPreviewHandler.TranslateAccelerator(ref MSG pmsg)
 		{
-			Trace.TraceInformation("TranslateAccelerator()");
-
 			if (_frame != null)
 				return _frame.TranslateAccelerator(ref pmsg);
 
@@ -170,8 +153,6 @@ namespace PreviewIo
 
 		public void GetWindow(out IntPtr phwnd)
 		{
-			Trace.TraceInformation("Getting window");
-
 			phwnd = _previewForm.Handle;
 		}
 
@@ -182,15 +163,11 @@ namespace PreviewIo
 
 		public void SetSite(object pUnkSite)
 		{
-			Trace.TraceInformation("Setting site");
-
 			_frame = pUnkSite as IPreviewHandlerFrame;
 		}
 
 		public void GetSite(ref Guid riid, out object ppvSite)
 		{
-			Trace.TraceInformation("Getting site");
-
 			ppvSite = _frame;
 		}
 
