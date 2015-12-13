@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -137,8 +136,6 @@ namespace PreviewIo
 		{
 			var focusResult = IntPtr.Zero;
 			_previewForm.Invoke(new MethodInvoker(() => WinApi.GetFocus()));
-			if (focusResult == IntPtr.Zero)
-				throw new Win32Exception();
 
 			phwnd = focusResult;
 		}
