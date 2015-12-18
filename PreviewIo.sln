@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewIo", "PreviewIo.csproj", "{B7AE83A1-5834-4CA5-B52E-84682FE187BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewIo", "PreviewIo\PreviewIo.csproj", "{B7AE83A1-5834-4CA5-B52E-84682FE187BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewIo.UnitTests", "..\PreviewIo.UnitTests\PreviewIo.UnitTests.csproj", "{00AB3D5C-EB29-4B90-B38B-542C710926EC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreviewIo.UnitTests", "PreviewIo.UnitTests\PreviewIo.UnitTests.csproj", "{00AB3D5C-EB29-4B90-B38B-542C710926EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
