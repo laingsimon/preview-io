@@ -73,22 +73,24 @@ namespace PreviewIo
 				((float)actualSize.Height / previousDrawingSize.Value.Height) * Settings.UpScaleForPrint);
 
 			var mostAppropriateScale = _GetMostAppropriateScale(scale);
+			if (mostAppropriateScale == 0)
+				mostAppropriateScale = 1;
 
 			//reset the drawing size to that of the preview
 			DrawingSize = new Size(
-				upscaledPreviewSize.Width / (int)mostAppropriateScale,
-				upscaledPreviewSize.Height / (int)mostAppropriateScale);
+				upscaledPreviewSize.Width / mostAppropriateScale,
+				upscaledPreviewSize.Height / mostAppropriateScale);
 		}
 
-		private float _GetMostAppropriateScale(SizeF scale)
+		private int _GetMostAppropriateScale(SizeF scale)
 		{
 			var widthScale = Math.Abs(Settings.UpScaleForPrint - scale.Width);
 			var heightScale = Math.Abs(Settings.UpScaleForPrint - scale.Height);
 
 			if (widthScale < heightScale)
-				return scale.Height;
+				return (int)scale.Height;
 
-			return scale.Width;
+			return (int)scale.Width;
 		}
 	}
 }
