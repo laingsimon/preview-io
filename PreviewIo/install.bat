@@ -5,7 +5,7 @@
 
 @mkdir "%installDir%" 2> nul
 
-@xcopy "PreviewIo\bin\Release\*.*" "%installDir%\" /Y
+@xcopy "*.*" "%installDir%\" /Y
 @copy uninstall.bat "%installDir%\" /Y
 
 @regasm.exe "%installDir%\PreviewIo.dll" /codebase /nologo /silent
