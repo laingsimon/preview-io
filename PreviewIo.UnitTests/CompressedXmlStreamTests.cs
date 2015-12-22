@@ -1,6 +1,9 @@
 ﻿using NUnit.Framework;
+using System;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Collections.Generic;
 
 namespace PreviewIo.UnitTests
 {
@@ -38,7 +41,8 @@ namespace PreviewIo.UnitTests
 			var compressedData = Encoding.UTF8.GetString(underlyingStream.ToArray());
 			Assert.That(
 					compressedData,
-					Is.EqualTo(CompressedXmlStreamTests.compressedData));
+					Is.EqualTo(CompressedXmlStreamTests.compressedData),
+					"\r\nExpected: " + _WriteBytes(CompressedXmlStreamTests.compressedData) + "\r\nActual: " + _WriteBytes(compressedData));
 		}
 
 		[Test]
@@ -54,6 +58,25 @@ namespace PreviewIo.UnitTests
 					decompressedData,
 					Is.EqualTo(CompressedXmlStreamTests.decompressedData));
 			}
+		}
+
+		private static string _WriteBytes(string base64)
+		{
+			var bytes = Convert.FromBase64String(base64);
+			var head = bytes.Take(25);
+
+			var tailStart = bytes.Length - 10;
+			if (tailStart <= 0)
+				tailStart = bytes.Length;
+
+			var tail = bytes.Skip(tailStart);
+
+			return string.Format("[{0} ... {1}] x {2}", _WriteBytes(head), _WriteBytes(tail), bytes.Length);
+		}
+
+		private static string _WriteBytes(IEnumerable<byte> bytes)
+		{
+			return string.Join(" ", bytes.Select(b => Convert.ToString(b, 16)));
 		}
 	}
 }
