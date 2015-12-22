@@ -8,7 +8,7 @@ namespace PreviewIo
 {
 	internal class Base64Stream : Stream
 	{
-		private MemoryStream _dataStream;
+		private readonly MemoryStream _dataStream;
 		private readonly bool _readOnly;
 		private readonly Stream _underlyingStream;
 
@@ -72,8 +72,9 @@ namespace PreviewIo
 
 		public override void Close()
 		{
-			FlushAsync(CancellationToken.None).Wait();
+			_Flush();
 
+			_dataStream.SetLength(0);
 			_dataStream.Close();
 
 			if (_underlyingStream != null)
@@ -105,26 +106,26 @@ namespace PreviewIo
 		}
 
 		public override void Flush()
-		{
-			FlushAsync(CancellationToken.None).Wait();
-		}
+		{ }
 
 		public override Task FlushAsync(CancellationToken cancellationToken)
 		{
-			return Task.Factory.StartNew(() =>
-			{
-				if (_readOnly)
-					return;
+			return Task.FromResult(0);
+		}
 
-				var base64String = Convert.ToBase64String(_dataStream.ToArray());
-				var base64Data = Encoding.UTF8.GetBytes(base64String);
+		private void _Flush()
+		{
+			if (_readOnly)
+				return;
 
-				_underlyingStream.Write(base64Data, 0, base64Data.Length);
-				_underlyingStream.Flush();
+			var base64String = Convert.ToBase64String(_dataStream.ToArray());
+			var base64Data = Encoding.UTF8.GetBytes(base64String);
 
-				_dataStream.Position = 0;
-				_dataStream.SetLength(0);
-			});
+			_underlyingStream.Write(base64Data, 0, base64Data.Length);
+			_underlyingStream.Flush();
+
+			_dataStream.Position = 0;
+			_dataStream.SetLength(0);
 		}
 
 		public override long Length
