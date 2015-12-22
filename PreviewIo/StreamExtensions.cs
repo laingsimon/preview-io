@@ -26,7 +26,7 @@ namespace PreviewIo
 			try
 			{
 				var reader = new StreamReader(stream);
-				var headerChars = new char[53];
+				var headerChars = new char[54];
 				reader.Read(headerChars, 0, headerChars.Length);
 				var headerText = new string(headerChars);
 
