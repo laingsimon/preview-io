@@ -7,10 +7,12 @@ namespace PreviewIo.UnitTests
 	[TestFixture]
 	public class CompressedXmlStreamTests
 	{
+		private const string decompressedData = @"<mxGraphModel dx=""1434"" dy=""782"" grid=""1"" gridSize=""10"" guides=""1"" tooltips=""1"" connect=""1"" arrows=""1"" fold=""1"" page=""1"" pageScale=""1"" pageWidth=""826"" pageHeight=""1169"" background=""#ffffff"" math=""0""><root><mxCell id=""0""/><mxCell id=""1"" parent=""0""/><mxCell id=""3"" value="""" style=""verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.file_2;fontSize=12;"" vertex=""1"" parent=""1""><mxGeometry x=""213"" y=""660"" width=""47.5"" height=""50"" as=""geometry""/></mxCell></root></mxGraphModel>";
+		private const string compressedData = @"fZNBr6IwEMc/DVcDVNE9Lq7PPewmL/Gwx02FAo2lQ0rxoZ/eKZ2KxOx6ofObf2faf8eI7dvxaHjX/IZSqCiNyzFiP6I0TdZsjR9Hbp5sdxg5UBtZkmgGJ3kXBGOigyxFvxBaAGVlt4QFaC0Ku2DcGPhayipQy64dr0PHGZwKrt7pH1naxtNdms38p5B1Ezon2TefOfPiUhsYNPWLUlZNP59ueag1XZQd0EQDgGXcqh33Qjkjg0fejY9/ZJ+HNELTQf6/gfkNV64GuqcHvb2Fi1+FsRJ9+MXPQn1CL60EjakzWAttxPLGtgrjBJdB+13J2mksdEh7a+Ai9qDAINOgsXJeSaUCQkviOD984PXzvuGd69yOtRukFb8PRqxQLf66dAXa0nAkLqbzY18RRu3dgwmRAUcBrbDmhhLakCbkAk1mltHIfc3vvN6uNh42L4+8ISGn2aqftWfLcUGuh3B+3Sn38n9hhwc=";
+
 		[Test]
 		public void ShouldBeAbleToReadDrawIoData()
 		{
-			const string compressedData = @"fZNBr6IwEMc/DVcDVNE9Lq7PPewmL/Gwx02FAo2lQ0rxoZ/eKZ2KxOx6ofObf2faf8eI7dvxaHjX/IZSqCiNyzFiP6I0TdZsjR9Hbp5sdxg5UBtZkmgGJ3kXBGOigyxFvxBaAGVlt4QFaC0Ku2DcGPhayipQy64dr0PHGZwKrt7pH1naxtNdms38p5B1Ezon2TefOfPiUhsYNPWLUlZNP59ueag1XZQd0EQDgGXcqh33Qjkjg0fejY9/ZJ+HNELTQf6/gfkNV64GuqcHvb2Fi1+FsRJ9+MXPQn1CL60EjakzWAttxPLGtgrjBJdB+13J2mksdEh7a+Ai9qDAINOgsXJeSaUCQkviOD984PXzvuGd69yOtRukFb8PRqxQLf66dAXa0nAkLqbzY18RRu3dgwmRAUcBrbDmhhLakCbkAk1mltHIfc3vvN6uNh42L4+8ISGn2aqftWfLcUGuh3B+3Sn38n9hhwc=";
 			using (var stream = CompressedXmlStream.Read(compressedData))
 			using (var reader = new StreamReader(stream))
 			{
@@ -18,27 +20,25 @@ namespace PreviewIo.UnitTests
 
 				Assert.That(
 					decompressedData,
-					Is.EqualTo(@"<mxGraphModel dx=""1434"" dy=""782"" grid=""1"" gridSize=""10"" guides=""1"" tooltips=""1"" connect=""1"" arrows=""1"" fold=""1"" page=""1"" pageScale=""1"" pageWidth=""826"" pageHeight=""1169"" background=""#ffffff"" math=""0""><root><mxCell id=""0""/><mxCell id=""1"" parent=""0""/><mxCell id=""3"" value="""" style=""verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.file_2;fontSize=12;"" vertex=""1"" parent=""1""><mxGeometry x=""213"" y=""660"" width=""47.5"" height=""50"" as=""geometry""/></mxCell></root></mxGraphModel>"));
+					Is.EqualTo(CompressedXmlStreamTests.decompressedData));
 			}
 		}
 
 		[Test]
 		public void ShouldBeAbleToWriteDrawIoData()
 		{
-			const string uncompressedData = @"<mxGraphModel dx=""1434"" dy=""782"" grid=""1"" gridSize=""10"" guides=""1"" tooltips=""1"" connect=""1"" arrows=""1"" fold=""1"" page=""1"" pageScale=""1"" pageWidth=""826"" pageHeight=""1169"" background=""#ffffff"" math=""0""><root><mxCell id=""0""/><mxCell id=""1"" parent=""0""/><mxCell id=""3"" value="""" style=""verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.file_2;fontSize=12;"" vertex=""1"" parent=""1""><mxGeometry x=""213"" y=""660"" width=""47.5"" height=""50"" as=""geometry""/></mxCell></root></mxGraphModel>";
-
 			var underlyingStream = new MemoryStream();
 			using (var stream = CompressedXmlStream.Write(underlyingStream))
 			using (var writer = new StreamWriter(stream))
 			{
-				writer.Write(uncompressedData);
+				writer.Write(decompressedData);
 				writer.Flush();
 			}
 
 			var compressedData = Encoding.UTF8.GetString(underlyingStream.ToArray());
 			Assert.That(
 					compressedData,
-					Is.EqualTo(@"fZNBr6IwEMc/DVcDVNE9Lq7PPewmL/Gwx02FAo2lQ0rxoZ/eKZ2KxOx6ofObf2faf8eI7dvxaHjX/IZSqCiNyzFiP6I0TdZsjR9Hbp5sdxg5UBtZkmgGJ3kXBGOigyxFvxBaAGVlt4QFaC0Ku2DcGPhayipQy64dr0PHGZwKrt7pH1naxtNdms38p5B1Ezon2TefOfPiUhsYNPWLUlZNP59ueag1XZQd0EQDgGXcqh33Qjkjg0fejY9/ZJ+HNELTQf6/gfkNV64GuqcHvb2Fi1+FsRJ9+MXPQn1CL60EjakzWAttxPLGtgrjBJdB+13J2mksdEh7a+Ai9qDAINOgsXJeSaUCQkviOD984PXzvuGd69yOtRukFb8PRqxQLf66dAXa0nAkLqbzY18RRu3dgwmRAUcBrbDmhhLakCbkAk1mltHIfc3vvN6uNh42L4+8ISGn2aqftWfLcUGuh3B+3Sn38n9hhwc="));
+					Is.EqualTo(CompressedXmlStreamTests.compressedData));
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace PreviewIo.UnitTests
 
 				Assert.That(
 					decompressedData,
-					Is.EqualTo(@"<mxGraphModel dx=""1434"" dy=""782"" grid=""1"" gridSize=""10"" guides=""1"" tooltips=""1"" connect=""1"" arrows=""1"" fold=""1"" page=""1"" pageScale=""1"" pageWidth=""826"" pageHeight=""1169"" background=""#ffffff"" math=""0""><root><mxCell id=""0""/><mxCell id=""1"" parent=""0""/><mxCell id=""3"" value="""" style=""verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.file_2;fontSize=12;"" vertex=""1"" parent=""1""><mxGeometry x=""213"" y=""660"" width=""47.5"" height=""50"" as=""geometry""/></mxCell></root></mxGraphModel>"));
+					Is.EqualTo(CompressedXmlStreamTests.decompressedData));
 			}
 		}
 	}
