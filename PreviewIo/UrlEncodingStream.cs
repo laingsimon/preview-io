@@ -13,15 +13,27 @@ namespace PreviewIo
 
 		public UrlEncodingStream(Stream underlyingStream, bool readOnly)
 		{
+			if (underlyingStream == null)
+				throw new ArgumentNullException("underlyingStream");
+
 			_readOnly = readOnly;
 
 			if (readOnly)
 			{
-				var base64Data = new StreamReader(underlyingStream).ReadToEnd();
-				_dataStream = new MemoryStream(HttpUtility.UrlDecodeToBytes(base64Data), false);
+				if (!underlyingStream.CanRead)
+					throw new ArgumentException("Stream must be readable", "underlyingStream");
+
+				var urlEncodedData = new StreamReader(underlyingStream).ReadToEnd();
+				if (string.IsNullOrEmpty(urlEncodedData))
+					throw new InvalidOperationException("Stream contains no urlEncoded data");
+
+				_dataStream = new MemoryStream(HttpUtility.UrlDecodeToBytes(urlEncodedData), false);
 			}
 			else
 			{
+				if (!underlyingStream.CanWrite)
+					throw new ArgumentException("Stream must be writeable", "underlyingStream");
+
 				_dataStream = underlyingStream;
 			}
 		}
@@ -29,7 +41,7 @@ namespace PreviewIo
 		public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not readable");
 
 			return _dataStream.BeginRead(buffer, offset, count, callback, state);
 		}
@@ -37,7 +49,7 @@ namespace PreviewIo
 		public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not writeable");
 
 			return _dataStream.BeginWrite(buffer, offset, count, callback, state);
 		}
@@ -70,7 +82,7 @@ namespace PreviewIo
 		public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not readable");
 
 			return _dataStream.CopyToAsync(destination, bufferSize, cancellationToken);
 		}
@@ -78,7 +90,7 @@ namespace PreviewIo
 		public override int EndRead(IAsyncResult asyncResult)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not readable");
 
 			return _dataStream.EndRead(asyncResult);
 		}
@@ -86,18 +98,24 @@ namespace PreviewIo
 		public override void EndWrite(IAsyncResult asyncResult)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not writeable");
 
 			base.EndWrite(asyncResult);
 		}
 
 		public override void Flush()
 		{
+			if (_readOnly)
+				throw new InvalidOperationException("Stream is not writeable");
+
 			_dataStream.Flush();
 		}
 
 		public override Task FlushAsync(CancellationToken cancellationToken)
 		{
+			if (_readOnly)
+				throw new InvalidOperationException("Stream is not writeable");
+
 			return _dataStream.FlushAsync(cancellationToken);
 		}
 
@@ -115,7 +133,7 @@ namespace PreviewIo
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not readable");
 
 			return _dataStream.Read(buffer, offset, count);
 		}
@@ -123,7 +141,7 @@ namespace PreviewIo
 		public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not readable");
 
 			return _dataStream.ReadAsync(buffer, offset, count, cancellationToken);
 		}
@@ -131,7 +149,7 @@ namespace PreviewIo
 		public override int ReadByte()
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not readable");
 
 			return _dataStream.ReadByte();
 		}
@@ -150,7 +168,7 @@ namespace PreviewIo
 		public override void SetLength(long value)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not writeable");
 
 			_dataStream.SetLength(value);
 		}
@@ -158,7 +176,7 @@ namespace PreviewIo
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not writeable");
 
 			_dataStream.Write(buffer, offset, count);
 		}
@@ -166,7 +184,7 @@ namespace PreviewIo
 		public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not writeable");
 
 			return _dataStream.WriteAsync(buffer, offset, count, cancellationToken);
 		}
@@ -174,7 +192,7 @@ namespace PreviewIo
 		public override void WriteByte(byte value)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is not writeable");
 
 			_dataStream.WriteByte(value);
 		}

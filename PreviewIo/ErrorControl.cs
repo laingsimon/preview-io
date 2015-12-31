@@ -7,6 +7,9 @@ namespace PreviewIo
 	{
 		public ErrorControl(Exception exception)
 		{
+			if (exception == null)
+				throw new ArgumentNullException("exception");
+
 			InitializeComponent();
 			txtMessage.Text = exception.ToString();
 

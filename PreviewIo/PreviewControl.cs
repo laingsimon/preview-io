@@ -23,6 +23,11 @@ namespace PreviewIo
 
 		public PreviewControl(Image preview, PreviewContext context)
 		{
+			if (preview == null)
+				throw new ArgumentNullException("preview");
+			if (context == null)
+				throw new ArgumentNullException("context");
+
 			_originalPreview = preview;
 			_context = context;
 			InitializeComponent();
@@ -36,6 +41,9 @@ namespace PreviewIo
 
 		private Image _ResizePreviewImageToZoom(Image preview, double zoom)
 		{
+			if (_context.DrawingSize == null)
+				return preview;
+
 			var drawingSize = _context.DrawingSize.Value;
 			var newSize = new Size((int)(drawingSize.Width * zoom), (int)(drawingSize.Height * zoom));
 			return _ResizePreviewImageToSize(preview, newSize);
@@ -64,14 +72,15 @@ namespace PreviewIo
 		private void itmPrint_Click(object sender, EventArgs e)
 		// ReSharper restore InconsistentNaming
 		{
+			string tempFile = null;
+
 			try
 			{
-				var tempFile = _CreateTempFile();
+				tempFile = _CreateTempFile();
 
 				_originalPreview.Save(tempFile, ImageFormat.Png);
 
 				Wia.Print(this, tempFile);
-				_DeleteTempFile(tempFile);
 			}
 			catch (Exception exc)
 			{
@@ -85,13 +94,18 @@ namespace PreviewIo
 					Dock = DockStyle.Fill
 				});
 			}
+			finally
+			{
+				if (!string.IsNullOrEmpty(tempFile))
+					_DeleteTempFile(tempFile);
+			}
 		}
 
 		private static string _CreateTempFile()
 		{
 			try
 			{
-				return Path.ChangeExtension(Path.GetTempFileName(), ".png");
+				return Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".png");
 			}
 			catch (Exception exc)
 			{
@@ -103,7 +117,8 @@ namespace PreviewIo
 		{
 			try
 			{
-				File.Delete(filePath);
+				if (File.Exists(filePath))
+					File.Delete(filePath);
 			}
 			// ReSharper disable EmptyGeneralCatchClause
 			catch { }
@@ -244,6 +259,10 @@ namespace PreviewIo
 		private double _CalculateZoom()
 		{
 			var originalWidth = (double)_context.DrawingSize.Value.Width;
+
+			if (originalWidth == 0)
+				return 0;
+
 			var displayWidth = (double)picPreview.Width;
 
 			return Math.Round(displayWidth / originalWidth, 2);

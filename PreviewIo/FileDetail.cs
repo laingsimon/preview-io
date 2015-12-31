@@ -9,6 +9,9 @@ namespace PreviewIo
 
 		public FileDetail(string fileName, DateTime lastModified)
 		{
+			if (string.IsNullOrEmpty(fileName))
+				throw new ArgumentNullException("fileName");
+
 			FileName = fileName;
 			LastModified = lastModified;
 		}

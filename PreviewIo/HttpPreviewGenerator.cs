@@ -19,6 +19,13 @@ namespace PreviewIo
 
 		public HttpPreviewGenerator(PreviewSettings settings, HttpClient client, Uri requestUri)
 		{
+			if (settings == null)
+				throw new ArgumentNullException("settings");
+			if (client == null)
+				throw new ArgumentNullException("client");
+			if (requestUri == null)
+				throw new ArgumentNullException("requestUri");
+
 			_settings = settings;
 			_client = client;
 			_requestUri = requestUri;
@@ -26,6 +33,13 @@ namespace PreviewIo
 
 		public async Task<Stream> GeneratePreview(Stream drawingContent, FileDetail fileDetail, Size previewSize, CancellationToken token)
 		{
+			if (drawingContent == null)
+				throw new ArgumentNullException("drawingContent");
+			if (fileDetail == null)
+				throw new ArgumentNullException("fileDetail");
+			if (!drawingContent.CanRead)
+				throw new ArgumentException("Stream must be readable", "drawingContent");
+
 			var request = new FormUrlEncodedContent(new Dictionary<string, string>
 			{
 				{ "filename", "preview" },
@@ -39,7 +53,7 @@ namespace PreviewIo
 			});
 
 			var response = await _client.PostAsync(
-				_requestUri.ToString(),
+				_requestUri,
 				request,
 				cancellationToken: token);
 

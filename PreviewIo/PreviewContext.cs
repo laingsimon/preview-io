@@ -33,6 +33,13 @@ namespace PreviewIo
 
 		public void OnPreviewRequired(Stream stream, FileDetail fileDetail)
 		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
+			if (fileDetail == null)
+				throw new ArgumentNullException("fileDetail");
+			if (!stream.CanRead)
+				throw new ArgumentException("Stream must be readable", "stream");
+
 			TokenSource.Cancel();
 			TokenSource = new CancellationTokenSource();
 			FileStream = stream;
@@ -57,6 +64,9 @@ namespace PreviewIo
 
 		public void RecalculateDrawingSize(Size upscaledPreviewSize)
 		{
+			if (Settings.UpScaleForPrint <= 0)
+				throw new InvalidOperationException("Settings.UpScaleForPrint must be a positive number");
+
 			var actualSize = new Size(
 				upscaledPreviewSize.Width / Settings.UpScaleForPrint,
 				upscaledPreviewSize.Height / Settings.UpScaleForPrint);
@@ -64,7 +74,7 @@ namespace PreviewIo
 			var previousDrawingSize = DrawingSize;
 			DrawingSize = actualSize;
 
-			if (previousDrawingSize == null)
+			if (previousDrawingSize == null || previousDrawingSize.Value.Width == 0 || previousDrawingSize.Value.Height == 0)
 				return;
 
 			//work out the actual scale of the preview compared to the requested size

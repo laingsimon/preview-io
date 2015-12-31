@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,13 @@ namespace PreviewIo
 	{
 		public async Task<Size?> ExtractSize(Stream fileContent, FileDetail fileDetail, CancellationToken token)
 		{
+			if (fileContent == null)
+				throw new ArgumentNullException("fileContent");
+			if (fileDetail == null)
+				throw new ArgumentNullException("fileDetail");
+			if (!fileContent.CanRead)
+				throw new ArgumentException("Stream must be readable", "fileContent");
+
 			return await Task.Factory.StartNew(() =>
 			{
 				try
@@ -40,6 +48,9 @@ namespace PreviewIo
 			if (!rootNodeName.Equals("mxGraphModel"))
 				rootNode = _UnCompressDocument(rootNode.Element("diagram"));
 
+			if (rootNode == null)
+				return null;
+
 			var dx = rootNode.Attribute("dx").Value;
 			var dy = rootNode.Attribute("dy").Value;
 
@@ -52,6 +63,9 @@ namespace PreviewIo
 
 		private static XElement _UnCompressDocument(XElement diagram)
 		{
+			if (diagram == null)
+				return null;
+
 			var stream = CompressedXmlStream.Read(diagram.Value);
 			using (var reader = new StreamReader(stream))
 			{

@@ -8,11 +8,11 @@ namespace PreviewIo
 		private bool _reformat = false;
 		private readonly string _xml;
 
-		public XmlControl(string xml, bool initiallyReformatted = false)
+		public XmlControl(string xml = null, bool initiallyReformatted = false)
 		{
 			InitializeComponent();
 			_reformat = initiallyReformatted;
-			_xml = xml;
+			_xml = xml ?? string.Empty;
 			_UpdateDisplay();
 		}
 

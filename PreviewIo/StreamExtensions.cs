@@ -8,11 +8,19 @@ namespace PreviewIo
 	{
 		public static Stream ToStream(this IStream stream)
 		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
+
 			return new _ReadOnlyStream(stream);
 		}
 
 		public static MemoryStream ToMemoryStream(this Stream stream)
 		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
+			if (!stream.CanRead)
+				throw new ArgumentException("Stream must be readable", "stream");
+
 			var buffer = new byte[stream.Length];
 			stream.Read(buffer, 0, buffer.Length);
 			return new MemoryStream(buffer, false);
@@ -20,6 +28,10 @@ namespace PreviewIo
 
 		public static bool IsDrawing(this Stream stream)
 		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
+			if (!stream.CanRead)
+				throw new ArgumentException("Stream must be readable", "stream");
 			if (!stream.CanSeek)
 				throw new InvalidOperationException("This operation would corrupt the stream");
 
@@ -40,6 +52,10 @@ namespace PreviewIo
 
 		public static string ReadAsString(this Stream stream)
 		{
+			if (stream == null)
+				throw new ArgumentNullException("stream");
+			if (!stream.CanRead)
+				throw new ArgumentException("Stream must be readable", "stream");
 			if (!stream.CanSeek)
 				throw new InvalidOperationException("This operation would corrupt the stream");
 

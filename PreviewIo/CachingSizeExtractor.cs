@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -13,11 +14,19 @@ namespace PreviewIo
 
 		public CachingSizeExtractor(ISizeExtractor underlyingExtractor)
 		{
+			if (underlyingExtractor == null)
+				throw new ArgumentNullException("underlyingExtractor");
+
 			_underlyingExtractor = underlyingExtractor;
 		}
 
 		public async Task<Size?> ExtractSize(Stream fileContent, FileDetail fileDetail, CancellationToken token)
 		{
+			if (fileContent == null)
+				throw new ArgumentNullException("fileContent");
+			if (fileDetail == null)
+				throw new ArgumentNullException("fileDetail");
+
 			if (_cache.ContainsKey(fileDetail))
 				return _cache[fileDetail];
 

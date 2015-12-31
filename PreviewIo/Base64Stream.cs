@@ -14,21 +14,36 @@ namespace PreviewIo
 
 		public Base64Stream(string base64String)
 		{
+			if (string.IsNullOrEmpty(base64String))
+				throw new ArgumentNullException("base64String");
+
 			_dataStream = new MemoryStream(Convert.FromBase64String(base64String), false);
 			_readOnly = true;
 		}
 
 		public Base64Stream(Stream underlyingStream, bool readOnly)
 		{
-			_readOnly = readOnly;
+			if (underlyingStream == null)
+				throw new ArgumentNullException("underlyingStream");
 
+			_readOnly = readOnly;
 			if (readOnly)
 			{
+				if (!underlyingStream.CanRead)
+					throw new ArgumentException("Stream must be readable", "underlyingStream");
+
 				var base64Data = new StreamReader(underlyingStream).ReadToEnd();
+
+				if (string.IsNullOrEmpty(base64Data))
+					throw new InvalidOperationException("Stream contained no readable base64");
+
 				_dataStream = new MemoryStream(Convert.FromBase64String(base64Data), false);
 			}
 			else
 			{
+				if (!underlyingStream.CanWrite)
+					throw new ArgumentException("Stream must be writable", "underlyingStream");
+
 				_underlyingStream = underlyingStream;
 				_dataStream = new MemoryStream();
 			}
@@ -37,7 +52,7 @@ namespace PreviewIo
 		public override IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only writable");
 
 			return _dataStream.BeginRead(buffer, offset, count, callback, state);
 		}
@@ -45,7 +60,7 @@ namespace PreviewIo
 		public override IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback callback, object state)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only readable");
 
 			return _dataStream.BeginWrite(buffer, offset, count, callback, state);
 		}
@@ -84,7 +99,7 @@ namespace PreviewIo
 		public override Task CopyToAsync(Stream destination, int bufferSize, CancellationToken cancellationToken)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only writable");
 
 			return _dataStream.CopyToAsync(destination, bufferSize, cancellationToken);
 		}
@@ -92,7 +107,7 @@ namespace PreviewIo
 		public override int EndRead(IAsyncResult asyncResult)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only writable");
 
 			return _dataStream.EndRead(asyncResult);
 		}
@@ -100,7 +115,7 @@ namespace PreviewIo
 		public override void EndWrite(IAsyncResult asyncResult)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only readable");
 
 			base.EndWrite(asyncResult);
 		}
@@ -142,7 +157,7 @@ namespace PreviewIo
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only writable");
 
 			return _dataStream.Read(buffer, offset, count);
 		}
@@ -150,7 +165,7 @@ namespace PreviewIo
 		public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only writable");
 
 			return _dataStream.ReadAsync(buffer, offset, count, cancellationToken);
 		}
@@ -158,7 +173,7 @@ namespace PreviewIo
 		public override int ReadByte()
 		{
 			if (!_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only writable");
 
 			return _dataStream.ReadByte();
 		}
@@ -177,7 +192,7 @@ namespace PreviewIo
 		public override void SetLength(long value)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only readable");
 
 			_dataStream.SetLength(value);
 		}
@@ -185,7 +200,7 @@ namespace PreviewIo
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only readable");
 
 			_dataStream.Write(buffer, offset, count);
 		}
@@ -193,7 +208,7 @@ namespace PreviewIo
 		public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only readable");
 
 			return _dataStream.WriteAsync(buffer, offset, count, cancellationToken);
 		}
@@ -201,7 +216,7 @@ namespace PreviewIo
 		public override void WriteByte(byte value)
 		{
 			if (_readOnly)
-				throw new InvalidOperationException();
+				throw new InvalidOperationException("Stream is only readable");
 
 			_dataStream.WriteByte(value);
 		}

@@ -15,6 +15,9 @@ namespace PreviewIo
 			Uri proxyUrl = null,
 			Uri previewUrl = null)
 		{
+			if (settings == null)
+				throw new ArgumentNullException("settings");
+
 			_settings = settings;
 			_previewUrl = previewUrl ?? new Uri("https://exp.draw.io/ImageExport4/export", UriKind.Absolute);
 			_proxyUrl = proxyUrl ?? _GetDefaultProxy(_previewUrl);

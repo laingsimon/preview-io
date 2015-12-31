@@ -13,6 +13,13 @@ namespace PreviewIo
 
 		public PreviewHandlerForm(PreviewContext context, ISizeExtractor sizeExtractor, IPreviewGenerator previewGenerator)
 		{
+			if (context == null)
+				throw new ArgumentNullException("context");
+			if (sizeExtractor == null)
+				throw new ArgumentNullException("sizeExtractor");
+			if (previewGenerator == null)
+				throw new ArgumentNullException("previewGenerator");
+
 			_context = context;
 			_sizeExtractor = sizeExtractor;
 			_previewGenerator = previewGenerator;
@@ -37,7 +44,12 @@ namespace PreviewIo
 
 		private void _InvokeOnUiThread(MethodInvoker method)
 		{
-			if (Created)
+			if (!Created)
+				return;
+
+			if (!InvokeRequired)
+				method.Invoke();
+			else
 				Invoke(method);
 		}
 
@@ -113,14 +125,13 @@ namespace PreviewIo
 			//
 			// PreviewHandlerForm
 			//
-			this.BackColor = System.Drawing.SystemColors.Window;
-			this.ClientSize = new System.Drawing.Size(284, 262);
+			this.BackColor = SystemColors.Window;
+			this.ClientSize = new Size(284, 262);
 			this.DoubleBuffered = true;
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.FormBorderStyle = FormBorderStyle.None;
 			this.KeyPreview = true;
 			this.Name = "PreviewHandlerForm";
 			this.ResumeLayout(false);
-
 		}
 	}
 }
