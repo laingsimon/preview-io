@@ -49,13 +49,6 @@ namespace PreviewIo
 		{
 			var previewTypeClassId = previewerType.GUID.ToString("B");
 
-			// Create a new prevhost AppID so that this always runs in its own isolated process
-			using (var appIdsKey = Registry.ClassesRoot.OpenSubKey("AppID", true))
-			using (var appIdKey = appIdsKey.CreateSubKey(_componentClassId))
-			{
-				appIdKey.SetValue("DllSurrogate", @"%SystemRoot%\system32\prevhost.exe", RegistryValueKind.ExpandString);
-			}
-
 			// Add preview handler to preview handler list
 			using (var handlersKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PreviewHandlers", true))
 				handlersKey.SetValue(previewTypeClassId, name, RegistryValueKind.String);
@@ -65,8 +58,7 @@ namespace PreviewIo
 			using (var idKey = clsidKey.OpenSubKey(previewTypeClassId, true))
 			{
 				idKey.SetValue("DisplayName", name, RegistryValueKind.String);
-				idKey.SetValue("AppID", _componentClassId, RegistryValueKind.String);
-				idKey.SetValue("DisableLowILProcessIsolation", 1, RegistryValueKind.DWord);
+				idKey.SetValue("AppID", "{6d2b5079-2f0b-48dd-ab7f-97cec514d30b}", RegistryValueKind.String); //see https://msdn.microsoft.com/en-us/library/windows/desktop/cc144144(v=vs.85).aspx
 			}
 
 			Trace.WriteLine("Registering extension '.xml' with previewer '" + previewTypeClassId + "'");

@@ -1,6 +1,5 @@
 @set netframework32=c:\Windows\Microsoft.NET\Framework64\v4.0.30319\
 @set netframework64=c:\Windows\Microsoft.NET\Framework\v4.0.30319\
-@set path=%netframework32%;%netframework64%;%path%
 @set installDir=%ProgramFiles%\PreviewIo
 @set source=%~dp0
 
@@ -11,7 +10,12 @@
 
 @xcopy "%source%*.*" "%installDir%\" /Y
 
-@regasm.exe "%installDir%\PreviewIo.dll" /codebase /nologo /silent
+@if exist "%netframework32%regasm.exe" (
+	@call "%netframework32%regasm.exe" "%installDir%\PreviewIo.dll" /codebase /nologo /silent
+)
+@if exist "%netframework64%regasm.exe" (
+	@call "%netframework64%regasm.exe" "%installDir%\PreviewIo.dll" /codebase /nologo /silent
+)
 
 @if "%errorlevel%"=="0" @echo Installed successfully
 @goto eof
